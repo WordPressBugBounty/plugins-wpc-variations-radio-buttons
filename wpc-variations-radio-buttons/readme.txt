@@ -2,10 +2,9 @@
 Contributors: wpclever
 Donate link: https://wpclever.net
 Tags: woocommerce, wpc, radio buttons, variation
-Requires at least: 4.0
 Tested up to: 6.7
-Version: 3.5.9
-Stable tag: 3.5.9
+Version: 3.6.0
+Stable tag: 3.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +48,10 @@ Please try other plugins from us:
 4. Go to WPClever > Variations Radio Buttons to change settings
 
 == Changelog ==
+
+= 3.6.0 =
+* Updated: Optimized the code
+* Updated: Compatible with WP 6.7 & Woo 9.6
 
 = 3.5.9 =
 * Updated: Optimized the code
