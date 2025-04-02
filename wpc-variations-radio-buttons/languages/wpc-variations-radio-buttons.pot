@@ -2,41 +2,46 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WPC Variations Radio Buttons for WooCommerce 3.6.0\n"
+"Project-Id-Version: WPC Variations Radio Buttons for WooCommerce 3.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpc-variations-radio-buttons\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-02-03T14:51:05+00:00\n"
+"POT-Creation-Date: 2025-04-02T04:48:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.5.0\n"
+"X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wpc-variations-radio-buttons\n"
 
 #. Plugin Name of the plugin
+#: wpc-variations-radio-buttons.php
 msgid "WPC Variations Radio Buttons for WooCommerce"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: wpc-variations-radio-buttons.php
 msgid "https://wpclever.net/"
 msgstr ""
 
 #. Description of the plugin
+#: wpc-variations-radio-buttons.php
 msgid "WPC Variations Radio Buttons will replace dropdown select with radio buttons for the buyer easier in selecting the variations."
 msgstr ""
 
 #. Author of the plugin
+#: wpc-variations-radio-buttons.php
 msgid "WPClever"
 msgstr ""
 
 #. Author URI of the plugin
+#: wpc-variations-radio-buttons.php
 msgid "https://wpclever.net"
 msgstr ""
 
 #: wpc-variations-radio-buttons.php:136
 #: wpc-variations-radio-buttons.php:146
-#: wpc-variations-radio-buttons.php:536
+#: wpc-variations-radio-buttons.php:567
 msgid "WPC Variations Radio Buttons"
 msgstr ""
 
@@ -53,254 +58,254 @@ msgstr ""
 msgid "Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating."
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:151
+#: wpc-variations-radio-buttons.php:152
 msgid "Reviews"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:152
+#: wpc-variations-radio-buttons.php:155
 msgid "Changelog"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:153
+#: wpc-variations-radio-buttons.php:158
 msgid "Discussion"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:158
+#: wpc-variations-radio-buttons.php:163
 msgid "Settings updated."
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:164
-#: wpc-variations-radio-buttons.php:394
+#: wpc-variations-radio-buttons.php:170
+#: wpc-variations-radio-buttons.php:417
 msgid "Settings"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:167
-#: wpc-variations-radio-buttons.php:395
+#: wpc-variations-radio-buttons.php:175
+#: wpc-variations-radio-buttons.php:418
 msgid "Premium Version"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:170
+#: wpc-variations-radio-buttons.php:179
 msgid "Essential Kit"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:194
-#: wpc-variations-radio-buttons.php:483
+#: wpc-variations-radio-buttons.php:203
+#: wpc-variations-radio-buttons.php:506
 msgid "Active"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:198
-#: wpc-variations-radio-buttons.php:210
-#: wpc-variations-radio-buttons.php:237
-#: wpc-variations-radio-buttons.php:295
-#: wpc-variations-radio-buttons.php:307
-#: wpc-variations-radio-buttons.php:318
-#: wpc-variations-radio-buttons.php:329
-#: wpc-variations-radio-buttons.php:340
-#: wpc-variations-radio-buttons.php:491
+#: wpc-variations-radio-buttons.php:207
+#: wpc-variations-radio-buttons.php:219
+#: wpc-variations-radio-buttons.php:248
+#: wpc-variations-radio-buttons.php:313
+#: wpc-variations-radio-buttons.php:325
+#: wpc-variations-radio-buttons.php:336
+#: wpc-variations-radio-buttons.php:347
+#: wpc-variations-radio-buttons.php:358
+#: wpc-variations-radio-buttons.php:518
 msgid "No"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:199
-#: wpc-variations-radio-buttons.php:211
-#: wpc-variations-radio-buttons.php:238
-#: wpc-variations-radio-buttons.php:296
-#: wpc-variations-radio-buttons.php:308
-#: wpc-variations-radio-buttons.php:319
-#: wpc-variations-radio-buttons.php:330
-#: wpc-variations-radio-buttons.php:341
+#: wpc-variations-radio-buttons.php:208
+#: wpc-variations-radio-buttons.php:220
+#: wpc-variations-radio-buttons.php:249
+#: wpc-variations-radio-buttons.php:314
+#: wpc-variations-radio-buttons.php:326
+#: wpc-variations-radio-buttons.php:337
+#: wpc-variations-radio-buttons.php:348
+#: wpc-variations-radio-buttons.php:359
 msgid "Yes"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:201
+#: wpc-variations-radio-buttons.php:210
 msgid "This is the default status, you can set status for individual product in the its settings."
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:206
+#: wpc-variations-radio-buttons.php:215
 msgid "Hide unpurchasable variation"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:216
+#: wpc-variations-radio-buttons.php:225
 msgid "Selector interface"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:219
+#: wpc-variations-radio-buttons.php:228
 msgid "Radio buttons (default)"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:220
+#: wpc-variations-radio-buttons.php:229
 msgid "ddSlick"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:221
+#: wpc-variations-radio-buttons.php:230
 msgid "Select2"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:222
+#: wpc-variations-radio-buttons.php:231
 msgid "HTML select tag"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:223
+#: wpc-variations-radio-buttons.php:232
 msgid "Grid - 2 columns"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:224
+#: wpc-variations-radio-buttons.php:233
 msgid "Grid - 3 columns"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:225
+#: wpc-variations-radio-buttons.php:234
 msgid "Grid - 4 columns"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:233
+#: wpc-variations-radio-buttons.php:244
 msgid "Show \"Option none\""
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:244
+#: wpc-variations-radio-buttons.php:255
 msgid "\"Option none\" label"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:248
-#: wpc-variations-radio-buttons.php:678
-#: wpc-variations-radio-buttons.php:696
+#: wpc-variations-radio-buttons.php:261
+#: wpc-variations-radio-buttons.php:709
+#: wpc-variations-radio-buttons.php:727
 msgid "Choose an option"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:250
+#: wpc-variations-radio-buttons.php:264
 msgid "Leave blank to use the default text and its equivalent translation in multiple languages."
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:254
+#: wpc-variations-radio-buttons.php:268
 msgid "\"Option none\" image"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:258
+#: wpc-variations-radio-buttons.php:273
 msgid "Placeholder image"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:259
+#: wpc-variations-radio-buttons.php:274
 msgid "Main product's image"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:260
-#: wpc-variations-radio-buttons.php:545
+#: wpc-variations-radio-buttons.php:275
+#: wpc-variations-radio-buttons.php:576
 msgid "Custom image"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:261
+#: wpc-variations-radio-buttons.php:276
 msgid "No image"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:263
+#: wpc-variations-radio-buttons.php:278
 msgid "If you choose \"Placeholder image\", you can change it in WooCommerce > Settings > Products > Placeholder image."
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:270
-#: wpc-variations-radio-buttons.php:430
-#: wpc-variations-radio-buttons.php:550
+#: wpc-variations-radio-buttons.php:287
+#: wpc-variations-radio-buttons.php:453
+#: wpc-variations-radio-buttons.php:581
 msgid "Remove"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:275
-#: wpc-variations-radio-buttons.php:555
+#: wpc-variations-radio-buttons.php:293
+#: wpc-variations-radio-buttons.php:586
 msgid "Choose Image"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:281
+#: wpc-variations-radio-buttons.php:299
 msgid "Variation name"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:284
+#: wpc-variations-radio-buttons.php:302
 msgid "Formatted without attribute label (e.g Green, M)"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:285
+#: wpc-variations-radio-buttons.php:303
 msgid "Formatted with attribute label (e.g Color: Green, Size: M)"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:291
+#: wpc-variations-radio-buttons.php:309
 msgid "Include product name"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:298
+#: wpc-variations-radio-buttons.php:316
 msgid "Include the product name before variation name."
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:303
+#: wpc-variations-radio-buttons.php:321
 msgid "Show image"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:314
+#: wpc-variations-radio-buttons.php:332
 msgid "Show price"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:325
+#: wpc-variations-radio-buttons.php:343
 msgid "Show availability"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:336
+#: wpc-variations-radio-buttons.php:354
 msgid "Show description"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:411
+#: wpc-variations-radio-buttons.php:434
 msgid "Community support"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:428
+#: wpc-variations-radio-buttons.php:451
 msgid "Add to Variation"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:429
+#: wpc-variations-radio-buttons.php:452
 msgid "Custom Image"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:449
+#: wpc-variations-radio-buttons.php:472
 msgid "Radio Buttons"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:473
+#: wpc-variations-radio-buttons.php:496
 msgid "Product wasn't returned."
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:488
+#: wpc-variations-radio-buttons.php:512
 msgid "Default"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:488
+#: wpc-variations-radio-buttons.php:514
 msgid "settings"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:494
+#: wpc-variations-radio-buttons.php:522
 msgid "Yes (Overwrite)"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:540
+#: wpc-variations-radio-buttons.php:571
 msgid "Custom name"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:560
+#: wpc-variations-radio-buttons.php:591
 msgid "- OR - Custom image URL"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:1113
+#: wpc-variations-radio-buttons.php:1144
 msgid "Before variations wrap"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:1114
+#: wpc-variations-radio-buttons.php:1145
 msgid "After variations wrap"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:1115
+#: wpc-variations-radio-buttons.php:1146
 msgid "Before variations"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:1116
+#: wpc-variations-radio-buttons.php:1147
 msgid "After variations"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:1117
+#: wpc-variations-radio-buttons.php:1148
 msgid "Before variation"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:1118
+#: wpc-variations-radio-buttons.php:1149
 msgid "After variation"
 msgstr ""

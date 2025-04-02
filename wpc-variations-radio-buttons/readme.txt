@@ -3,8 +3,8 @@ Contributors: wpclever
 Donate link: https://wpclever.net
 Tags: woocommerce, wpc, radio buttons, variation
 Tested up to: 6.7
-Version: 3.6.0
-Stable tag: 3.6.0
+Version: 3.6.1
+Stable tag: 3.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ WPC Variations Radio Buttons will replace dropdown select with radio buttons for
 
 == Description ==
 
-**WPC Variations Radio Buttons for WooCommerce** is a blowing hit designed especially for helping store owners bring about a more visitor-friendly interface. When it comes to choosing an option from variable products, customers now don’t have to click on each option or browse from the drop down list in order to attain product info. By adding radio buttons, all variations and all attributes will be shown at one screen only. Making decisions now is a task of much less effort now to your visitors.
+**WPC Variations Radio Buttons for WooCommerce** is a blowing hit designed especially for helping store owners bring about a more visitor-friendly interface. When it comes to choosing an option from variable products, customers now don’t have to click on each option or browse from the dropdown list in order to attain product info. By adding radio buttons, all variations and all attributes will be shown at one screen only. Making decisions now is a task of much less effort now to your visitors.
 
 = Live demo =
 
@@ -48,6 +48,10 @@ Please try other plugins from us:
 4. Go to WPClever > Variations Radio Buttons to change settings
 
 == Changelog ==
+
+= 3.6.1 =
+* Updated: Optimized the code
+* Updated: Compatible with WP 6.7 & Woo 9.7
 
 = 3.6.0 =
 * Updated: Optimized the code
