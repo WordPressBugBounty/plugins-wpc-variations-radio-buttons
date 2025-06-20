@@ -3,23 +3,23 @@
  * Plugin Name: WPC Variations Radio Buttons for WooCommerce
  * Plugin URI: https://wpclever.net/
  * Description: WPC Variations Radio Buttons will replace dropdown select with radio buttons for the buyer easier in selecting the variations.
- * Version: 3.6.1
+ * Version: 3.6.2
  * Author: WPClever
  * Author URI: https://wpclever.net
  * Text Domain: wpc-variations-radio-buttons
  * Domain Path: /languages/
  * Requires Plugins: woocommerce
  * Requires at least: 4.0
- * Tested up to: 6.7
+ * Tested up to: 6.8
  * WC requires at least: 3.0
- * WC tested up to: 9.7
+ * WC tested up to: 9.9
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.6.1' );
+! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.6.2' );
 ! defined( 'WOOVR_LITE' ) && define( 'WOOVR_LITE', __FILE__ );
 ! defined( 'WOOVR_FILE' ) && define( 'WOOVR_FILE', __FILE__ );
 ! defined( 'WOOVR_URI' ) && define( 'WOOVR_URI', plugin_dir_url( __FILE__ ) );
@@ -121,7 +121,7 @@ if ( ! function_exists( 'woovr_init' ) ) {
 					if ( ! empty( self::$settings ) && isset( self::$settings[ $name ] ) ) {
 						$setting = self::$settings[ $name ];
 					} else {
-						$setting = get_option( '_woovr_' . $name, $default );
+						$setting = get_option( 'woovr_' . $name, $default );
 					}
 
 					return apply_filters( 'woovr_get_setting', $setting, $name, $default );
@@ -143,21 +143,28 @@ if ( ! function_exists( 'woovr_init' ) ) {
 					$active_tab = sanitize_key( $_GET['tab'] ?? 'settings' );
 					?>
                     <div class="wpclever_settings_page wrap">
-                        <h1 class="wpclever_settings_page_title"><?php echo esc_html__( 'WPC Variations Radio Buttons', 'wpc-variations-radio-buttons' ) . ' ' . esc_html( WOOVR_VERSION ) . ' ' . ( defined( 'WOOVR_PREMIUM' ) ? '<span class="premium" style="display: none">' . esc_html__( 'Premium', 'wpc-variations-radio-buttons' ) . '</span>' : '' ); ?></h1>
-                        <div class="wpclever_settings_page_desc about-text">
-                            <p>
-								<?php printf( /* translators: stars */ esc_html__( 'Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating.', 'wpc-variations-radio-buttons' ), '<span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span>' ); ?>
-                                <br/>
-                                <a href="<?php echo esc_url( WOOVR_REVIEWS ); ?>"
-                                   target="_blank"><?php esc_html_e( 'Reviews', 'wpc-variations-radio-buttons' ); ?></a>
-                                |
-                                <a href="<?php echo esc_url( WOOVR_CHANGELOG ); ?>"
-                                   target="_blank"><?php esc_html_e( 'Changelog', 'wpc-variations-radio-buttons' ); ?></a>
-                                |
-                                <a href="<?php echo esc_url( WOOVR_DISCUSSION ); ?>"
-                                   target="_blank"><?php esc_html_e( 'Discussion', 'wpc-variations-radio-buttons' ); ?></a>
-                            </p>
+                        <div class="wpclever_settings_page_header">
+                            <a class="wpclever_settings_page_header_logo" href="https://wpclever.net/"
+                               target="_blank" title="Visit wpclever.net"></a>
+                            <div class="wpclever_settings_page_header_text">
+                                <div class="wpclever_settings_page_title"><?php echo esc_html__( 'WPC Variations Radio Buttons', 'wpc-variations-radio-buttons' ) . ' ' . esc_html( WOOVR_VERSION ) . ' ' . ( defined( 'WOOVR_PREMIUM' ) ? '<span class="premium" style="display: none">' . esc_html__( 'Premium', 'wpc-variations-radio-buttons' ) . '</span>' : '' ); ?></div>
+                                <div class="wpclever_settings_page_desc about-text">
+                                    <p>
+										<?php printf( /* translators: stars */ esc_html__( 'Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating.', 'wpc-variations-radio-buttons' ), '<span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span>' ); ?>
+                                        <br/>
+                                        <a href="<?php echo esc_url( WOOVR_REVIEWS ); ?>"
+                                           target="_blank"><?php esc_html_e( 'Reviews', 'wpc-variations-radio-buttons' ); ?></a>
+                                        |
+                                        <a href="<?php echo esc_url( WOOVR_CHANGELOG ); ?>"
+                                           target="_blank"><?php esc_html_e( 'Changelog', 'wpc-variations-radio-buttons' ); ?></a>
+                                        |
+                                        <a href="<?php echo esc_url( WOOVR_DISCUSSION ); ?>"
+                                           target="_blank"><?php esc_html_e( 'Discussion', 'wpc-variations-radio-buttons' ); ?></a>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
+                        <h2></h2>
 						<?php if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ) { ?>
                             <div class="notice notice-success is-dismissible">
                                 <p><?php esc_html_e( 'Settings updated.', 'wpc-variations-radio-buttons' ); ?></p>
@@ -542,6 +549,8 @@ if ( ! function_exists( 'woovr_init' ) ) {
 					} else {
 						delete_post_meta( $post_id, '_woovr_active' );
 					}
+
+					self::delete_cache( $post_id );
 				}
 
 				function before_variations_form() {
@@ -687,456 +696,479 @@ if ( ! function_exists( 'woovr_init' ) ) {
 					return $product->is_purchasable() && $product->is_in_stock() && $product->has_enough_stock( 1 );
 				}
 
-				public static function variations_form( $product, $variation = false, $context = '' ) {
+				public static function variations_form( $product, $variation = false, $context = 'default' ) {
 					self::woovr_variations_form( $product, $variation, $context );
 				}
 
-				public static function woovr_variations_form( $product, $variation = false, $context = '', $allowed_terms = [] ) {
-					$product_id         = $product->get_id();
-					$unique_id          = uniqid( 'woovr_' . $product_id . '_' ); // compatible with WPC Product Bundles
-					$active             = apply_filters( 'woovr_active', get_post_meta( $product_id, '_woovr_active', true ) ?: 'default', $product, $variation, $context );
-					$show_clear         = apply_filters( 'woovr_show_clear', self::get_setting( 'show_clear', 'yes' ), $product, $variation, $context );
-					$hide_unpurchasable = apply_filters( 'woovr_hide_unpurchasable', self::get_setting( 'hide_unpurchasable', 'no' ), $product, $variation, $context );
+				public static function enable_cache( $context = 'default' ) {
+					return apply_filters( 'woovr_enable_cache', false, $context );
+				}
 
-					// settings
-					$selector          = apply_filters( 'woovr_default_selector', self::get_setting( 'selector', 'default' ), $product, $variation, $context );
-					$show_name         = apply_filters( 'woovr_default_variation_name', self::get_setting( 'variation_name', 'formatted' ), $product, $variation, $context );
-					$product_name      = apply_filters( 'woovr_default_product_name', self::get_setting( 'product_name', 'yes' ), $product, $variation, $context );
-					$show_image        = apply_filters( 'woovr_default_show_image', self::get_setting( 'show_image', 'yes' ), $product, $variation, $context );
-					$show_price        = apply_filters( 'woovr_default_show_price', self::get_setting( 'show_price', 'yes' ), $product, $variation, $context );
-					$show_availability = apply_filters( 'woovr_default_show_availability', self::get_setting( 'show_availability', 'yes' ), $product, $variation, $context );
-					$show_description  = apply_filters( 'woovr_default_show_description', self::get_setting( 'show_description', 'yes' ), $product, $variation, $context );
-					$clear_label       = apply_filters( 'woovr_default_clear_label', self::get_setting( 'clear_label', esc_html__( 'Choose an option', 'wpc-variations-radio-buttons' ) ), $product, $variation, $context );
-					$clear_image       = apply_filters( 'woovr_default_clear_image', self::get_setting( 'clear_image', 'placeholder' ), $product, $variation, $context );
-					$clear_image_id    = apply_filters( 'woovr_default_clear_image_id', self::get_setting( 'clear_image_id', 0 ), $product, $variation, $context );
+				public static function delete_cache( $product_id ) {
+					delete_transient( 'woovr_variations_form_' . $product_id );
+					do_action( 'woovr_delete_cache', $product_id );
+				}
 
-					if ( $active === 'yes' ) {
-						// overwrite settings
-						$selector          = get_post_meta( $product_id, '_woovr_selector', true ) ?: $selector;
-						$show_name         = get_post_meta( $product_id, '_woovr_variation_name', true ) ?: $show_name;
-						$show_image        = get_post_meta( $product_id, '_woovr_show_image', true ) ?: $show_image;
-						$show_price        = get_post_meta( $product_id, '_woovr_show_price', true ) ?: $show_price;
-						$show_availability = get_post_meta( $product_id, '_woovr_show_availability', true ) ?: $show_availability;
-						$show_description  = get_post_meta( $product_id, '_woovr_show_description', true ) ?: $show_description;
-						$clear_label       = ! empty( get_post_meta( $product_id, '_woovr_clear_label', true ) ) ? esc_html( get_post_meta( $product_id, '_woovr_clear_label', true ) ) : $clear_label;
-						$clear_image       = get_post_meta( $product_id, '_woovr_clear_image', true ) ?: $clear_image;
-						$clear_image_id    = get_post_meta( $product_id, '_woovr_clear_image_id', true ) ?: $clear_image_id;
-					}
+				public static function woovr_variations_form( $product, $variation = false, $context = 'default', $allowed_terms = [] ) {
+					$product_id = $product->get_id();
+					$cache_id   = 'woovr_variations_form_' . $product_id;
 
-					if ( empty( $clear_label ) ) {
-						$clear_label = esc_html__( 'Choose an option', 'wpc-variations-radio-buttons' );
-					}
+					if ( ! self::enable_cache( $context ) || ( false === ( $variations_form = get_transient( $cache_id ) ) ) ) {
+						ob_start();
 
-					// apply filters
-					$clear_label       = apply_filters( 'woovr_clear_label', $clear_label, $product, $variation, $context );
-					$clear_image       = apply_filters( 'woovr_clear_image', $clear_image, $product, $variation, $context );
-					$clear_image_id    = apply_filters( 'woovr_clear_image_id', $clear_image_id, $product, $variation, $context );
-					$selector          = apply_filters( 'woovr_selector', $selector, $product, $variation, $context );
-					$show_name         = apply_filters( 'woovr_show_name', $show_name, $product, $variation, $context );
-					$show_image        = apply_filters( 'woovr_show_image', $show_image, $product, $variation, $context );
-					$show_price        = apply_filters( 'woovr_show_price', $show_price, $product, $variation, $context );
-					$show_availability = apply_filters( 'woovr_show_availability', $show_availability, $product, $variation, $context );
-					$show_description  = apply_filters( 'woovr_show_description', $show_description, $product, $variation, $context );
+						$unique_id          = uniqid( 'woovr_' . $product_id . '_' ); // compatible with WPC Product Bundles
+						$active             = apply_filters( 'woovr_active', get_post_meta( $product_id, '_woovr_active', true ) ?: 'default', $product, $variation, $context );
+						$show_clear         = apply_filters( 'woovr_show_clear', self::get_setting( 'show_clear', 'yes' ), $product, $variation, $context );
+						$hide_unpurchasable = apply_filters( 'woovr_hide_unpurchasable', self::get_setting( 'hide_unpurchasable', 'no' ), $product, $variation, $context );
 
-					// clear image src
-					$clear_image_src = '';
+						// settings
+						$selector          = apply_filters( 'woovr_default_selector', self::get_setting( 'selector', 'default' ), $product, $variation, $context );
+						$show_name         = apply_filters( 'woovr_default_variation_name', self::get_setting( 'variation_name', 'formatted' ), $product, $variation, $context );
+						$product_name      = apply_filters( 'woovr_default_product_name', self::get_setting( 'product_name', 'yes' ), $product, $variation, $context );
+						$show_image        = apply_filters( 'woovr_default_show_image', self::get_setting( 'show_image', 'yes' ), $product, $variation, $context );
+						$show_price        = apply_filters( 'woovr_default_show_price', self::get_setting( 'show_price', 'yes' ), $product, $variation, $context );
+						$show_availability = apply_filters( 'woovr_default_show_availability', self::get_setting( 'show_availability', 'yes' ), $product, $variation, $context );
+						$show_description  = apply_filters( 'woovr_default_show_description', self::get_setting( 'show_description', 'yes' ), $product, $variation, $context );
+						$clear_label       = apply_filters( 'woovr_default_clear_label', self::get_setting( 'clear_label', esc_html__( 'Choose an option', 'wpc-variations-radio-buttons' ) ), $product, $variation, $context );
+						$clear_image       = apply_filters( 'woovr_default_clear_image', self::get_setting( 'clear_image', 'placeholder' ), $product, $variation, $context );
+						$clear_image_id    = apply_filters( 'woovr_default_clear_image_id', self::get_setting( 'clear_image_id', 0 ), $product, $variation, $context );
 
-					if ( $clear_image !== 'none' ) {
-						$clear_image_src = wc_placeholder_img_src();
-
-						if ( ( $clear_image === 'product' ) && ( $product_image_id = $product->get_image_id() ) ) {
-							$product_image   = wp_get_attachment_image_src( $product_image_id, self::$image_size );
-							$clear_image_src = $product_image[0];
+						if ( $active === 'yes' ) {
+							// overwrite settings
+							$selector          = get_post_meta( $product_id, '_woovr_selector', true ) ?: $selector;
+							$show_name         = get_post_meta( $product_id, '_woovr_variation_name', true ) ?: $show_name;
+							$show_image        = get_post_meta( $product_id, '_woovr_show_image', true ) ?: $show_image;
+							$show_price        = get_post_meta( $product_id, '_woovr_show_price', true ) ?: $show_price;
+							$show_availability = get_post_meta( $product_id, '_woovr_show_availability', true ) ?: $show_availability;
+							$show_description  = get_post_meta( $product_id, '_woovr_show_description', true ) ?: $show_description;
+							$clear_label       = ! empty( get_post_meta( $product_id, '_woovr_clear_label', true ) ) ? esc_html( get_post_meta( $product_id, '_woovr_clear_label', true ) ) : $clear_label;
+							$clear_image       = get_post_meta( $product_id, '_woovr_clear_image', true ) ?: $clear_image;
+							$clear_image_id    = get_post_meta( $product_id, '_woovr_clear_image_id', true ) ?: $clear_image_id;
 						}
 
-						if ( ( $clear_image === 'custom' ) && $clear_image_id ) {
-							$custom_image    = wp_get_attachment_image_src( $clear_image_id, self::$image_size );
-							$clear_image_src = $custom_image[0];
+						if ( empty( $clear_label ) ) {
+							$clear_label = esc_html__( 'Choose an option', 'wpc-variations-radio-buttons' );
 						}
-					}
 
-					$clear_image_src = apply_filters( 'woovr_clear_image_src', $clear_image_src, $product );
+						// apply filters
+						$clear_label       = apply_filters( 'woovr_clear_label', $clear_label, $product, $variation, $context );
+						$clear_image       = apply_filters( 'woovr_clear_image', $clear_image, $product, $variation, $context );
+						$clear_image_id    = apply_filters( 'woovr_clear_image_id', $clear_image_id, $product, $variation, $context );
+						$selector          = apply_filters( 'woovr_selector', $selector, $product, $variation, $context );
+						$show_name         = apply_filters( 'woovr_show_name', $show_name, $product, $variation, $context );
+						$show_image        = apply_filters( 'woovr_show_image', $show_image, $product, $variation, $context );
+						$show_price        = apply_filters( 'woovr_show_price', $show_price, $product, $variation, $context );
+						$show_availability = apply_filters( 'woovr_show_availability', $show_availability, $product, $variation, $context );
+						$show_description  = apply_filters( 'woovr_show_description', $show_description, $product, $variation, $context );
 
-					// default attributes
-					$df_attrs = [];
+						// clear image src
+						$clear_image_src = '';
 
-					if ( $variation ) {
-						$df_attrs_o = $variation->get_attributes();
-					} else {
-						$df_attrs_o = $product->get_default_attributes();
-					}
+						if ( $clear_image !== 'none' ) {
+							$clear_image_src = wc_placeholder_img_src();
 
-					foreach ( $df_attrs_o as $k => $v ) {
-						$k_a              = 'attribute_' . str_replace( 'attribute_', '', $k );
-						$df_attrs[ $k_a ] = $v;
-					}
+							if ( ( $clear_image === 'product' ) && ( $product_image_id = $product->get_image_id() ) ) {
+								$product_image   = wp_get_attachment_image_src( $product_image_id, self::$image_size );
+								$clear_image_src = $product_image[0];
+							}
 
-					// get default from URL
-					$df_request = [];
-
-					if ( isset( $_REQUEST ) ) {
-						foreach ( $_REQUEST as $rk => $rv ) {
-							if ( str_starts_with( $rk, 'attribute_' ) ) {
-								$k_a                = 'attribute_' . str_replace( 'attribute_', '', $rk );
-								$df_request[ $k_a ] = wc_clean( stripslashes( urldecode( $rv ) ) );
+							if ( ( $clear_image === 'custom' ) && $clear_image_id ) {
+								$custom_image    = wp_get_attachment_image_src( $clear_image_id, self::$image_size );
+								$clear_image_src = $custom_image[0];
 							}
 						}
-					}
 
-					$df_attrs = array_merge( $df_attrs, $df_request );
+						$clear_image_src = apply_filters( 'woovr_clear_image_src', $clear_image_src, $product );
 
-					$children = apply_filters( 'woovr_get_children', $product->get_children(), $product );
+						// default attributes
+						$df_attrs = [];
 
-					if ( ! empty( $children ) ) {
-						// build children data
-						$children_data = [];
+						if ( $variation ) {
+							$df_attrs_o = $variation->get_attributes();
+						} else {
+							$df_attrs_o = $product->get_default_attributes();
+						}
 
-						foreach ( $children as $child ) {
-							$child_product = wc_get_product( $child );
+						foreach ( $df_attrs_o as $k => $v ) {
+							$k_a              = 'attribute_' . str_replace( 'attribute_', '', $k );
+							$df_attrs[ $k_a ] = $v;
+						}
 
-							if ( ! $child_product || ! $child_product->variation_is_visible() ) {
-								continue;
+						// get default from URL
+						$df_request = [];
+
+						if ( isset( $_REQUEST ) ) {
+							foreach ( $_REQUEST as $rk => $rv ) {
+								if ( str_starts_with( $rk, 'attribute_' ) ) {
+									$k_a                = 'attribute_' . str_replace( 'attribute_', '', $rk );
+									$df_request[ $k_a ] = wc_clean( stripslashes( urldecode( $rv ) ) );
+								}
 							}
+						}
 
-							if ( ( $hide_unpurchasable === 'yes' ) && ! self::is_purchasable( $child_product ) ) {
-								continue;
-							}
+						$df_attrs = array_merge( $df_attrs, $df_request );
 
-							$attrs         = [];
-							$product_attrs = $product->get_attributes();
-							$child_attrs   = $child_product->get_attributes();
+						$children = apply_filters( 'woovr_get_children', $product->get_children(), $product );
 
-							foreach ( $child_attrs as $k => $a ) {
-								if ( $a === '' ) {
-									if ( $product_attrs[ $k ]->get_id() ) {
-										foreach ( $product_attrs[ $k ]->get_terms() as $term ) {
-											if ( ! empty( $allowed_terms ) && ! empty( $allowed_terms[ $k ] ) ) {
-												if ( ! in_array( $term->slug, $allowed_terms[ $k ] ) ) {
-													continue;
+						if ( ! empty( $children ) ) {
+							// build children data
+							$children_data = [];
+
+							foreach ( $children as $child ) {
+								$child_product = wc_get_product( $child );
+
+								if ( ! $child_product || ! $child_product->variation_is_visible() ) {
+									continue;
+								}
+
+								if ( ( $hide_unpurchasable === 'yes' ) && ! self::is_purchasable( $child_product ) ) {
+									continue;
+								}
+
+								$attrs         = [];
+								$product_attrs = $product->get_attributes();
+								$child_attrs   = $child_product->get_attributes();
+
+								foreach ( $child_attrs as $k => $a ) {
+									if ( $a === '' ) {
+										if ( $product_attrs[ $k ]->get_id() ) {
+											foreach ( $product_attrs[ $k ]->get_terms() as $term ) {
+												if ( ! empty( $allowed_terms ) && ! empty( $allowed_terms[ $k ] ) ) {
+													if ( ! in_array( $term->slug, $allowed_terms[ $k ] ) ) {
+														continue;
+													}
 												}
-											}
 
-											$attrs[ 'attribute_' . $k ][] = $term->slug;
+												$attrs[ 'attribute_' . $k ][] = $term->slug;
+											}
+										} else {
+											// custom attribute
+											foreach ( $product_attrs[ $k ]->get_options() as $option ) {
+												if ( ! empty( $allowed_terms ) && ! empty( $allowed_terms[ $k ] ) ) {
+													if ( ! in_array( $option, $allowed_terms[ $k ] ) ) {
+														continue;
+													}
+												}
+
+												$attrs[ 'attribute_' . $k ][] = $option;
+											}
 										}
 									} else {
-										// custom attribute
-										foreach ( $product_attrs[ $k ]->get_options() as $option ) {
-											if ( ! empty( $allowed_terms ) && ! empty( $allowed_terms[ $k ] ) ) {
-												if ( ! in_array( $option, $allowed_terms[ $k ] ) ) {
-													continue;
-												}
+										if ( ! empty( $allowed_terms ) && ! empty( $allowed_terms[ $k ] ) ) {
+											if ( ! in_array( $a, $allowed_terms[ $k ] ) ) {
+												continue 2;
 											}
-
-											$attrs[ 'attribute_' . $k ][] = $option;
 										}
-									}
-								} else {
-									if ( ! empty( $allowed_terms ) && ! empty( $allowed_terms[ $k ] ) ) {
-										if ( ! in_array( $a, $allowed_terms[ $k ] ) ) {
-											continue 2;
-										}
-									}
 
-									$attrs[ 'attribute_' . $k ][] = $a;
+										$attrs[ 'attribute_' . $k ][] = $a;
+									}
+								}
+
+								$attrs = woovr_combinations( $attrs );
+
+								foreach ( $attrs as $attr ) {
+									$children_data[] = [
+										'id'      => $child,
+										'product' => $child_product,
+										'attrs'   => $attr
+									];
 								}
 							}
 
-							$attrs = woovr_combinations( $attrs );
+							$children_data = apply_filters( 'woovr_get_children_data', $children_data, $product );
 
-							foreach ( $attrs as $attr ) {
-								$children_data[] = [
-									'id'      => $child,
-									'product' => $child_product,
-									'attrs'   => $attr
-								];
-							}
-						}
+							if ( ! empty( $children_data ) ) {
+								do_action( 'woovr_variations_above', $product );
 
-						$children_data = apply_filters( 'woovr_get_children_data', $children_data, $product );
+								echo '<div class="woovr-variations ' . esc_attr( 'woovr-variations-' . $selector ) . '" data-click="0" data-description="' . esc_attr( $show_description ) . '">';
 
-						if ( ! empty( $children_data ) ) {
-							do_action( 'woovr_variations_above', $product );
+								do_action( 'woovr_variations_before', $product );
+								// should add a fieldset and legend
 
-							echo '<div class="woovr-variations ' . esc_attr( 'woovr-variations-' . $selector ) . '" data-click="0" data-description="' . esc_attr( $show_description ) . '">';
+								if ( $selector === 'default' || $selector === 'grid' || $selector === 'grid-2' || $selector === 'grid-3' || $selector === 'grid-4' ) {
+									// show choose an option
+									if ( $show_clear === 'yes' ) {
+										$data_attrs = apply_filters( 'woovr_data_attributes_option_none', [
+											'id'            => 0,
+											'pid'           => $product_id,
+											'sku'           => '',
+											'purchasable'   => 'no',
+											'attrs'         => '',
+											'price'         => 0,
+											'regular-price' => 0,
+											'pricehtml'     => '',
+											'availability'  => '',
+											'weight'        => '',
+											'dimensions'    => ''
+										] );
 
-							do_action( 'woovr_variations_before', $product );
-							// should add a fieldset and legend
+										$df_checked = empty( $df_attrs ) ? 'checked' : '';
 
-							if ( $selector === 'default' || $selector === 'grid' || $selector === 'grid-2' || $selector === 'grid-3' || $selector === 'grid-4' ) {
-								// show choose an option
-								if ( $show_clear === 'yes' ) {
-									$data_attrs = apply_filters( 'woovr_data_attributes_option_none', [
-										'id'            => 0,
-										'pid'           => $product_id,
-										'sku'           => '',
-										'purchasable'   => 'no',
-										'attrs'         => '',
-										'price'         => 0,
-										'regular-price' => 0,
-										'pricehtml'     => '',
-										'availability'  => '',
-										'weight'        => '',
-										'dimensions'    => ''
-									] );
+										echo '<div class="woovr-variation woovr-variation-radio ' . ( empty( $df_attrs ) ? 'woovr-variation-active' : '' ) . '" ' . self::data_attributes( $data_attrs ) . '>';
 
-									$df_checked = empty( $df_attrs ) ? 'checked' : '';
+										do_action( 'woovr_variation_before' );
 
-									echo '<div class="woovr-variation woovr-variation-radio ' . ( empty( $df_attrs ) ? 'woovr-variation-active' : '' ) . '" ' . self::data_attributes( $data_attrs ) . '>';
+										$radio_id = 'woovr_' . $product_id . '_0';
+										echo apply_filters( 'woovr_variation_radio_selector', '<div class="woovr-variation-selector"><input type="radio" id="' . esc_attr( $radio_id ) . '" name="' . esc_attr( $unique_id ) . '" ' . $df_checked . '/></div>', $product_id, $df_checked, 0 );
 
-									do_action( 'woovr_variation_before' );
+										if ( ( $show_image === 'yes' ) && ( $clear_image !== 'none' ) ) {
+											echo '<div class="woovr-variation-image">' . apply_filters( 'woovr_clear_image', '<img src="' . esc_url( $clear_image_src ) . '"/>', $product ) . '</div>';
+										}
 
-									$radio_id = 'woovr_' . $product_id . '_0';
-									echo apply_filters( 'woovr_variation_radio_selector', '<div class="woovr-variation-selector"><input type="radio" id="' . esc_attr( $radio_id ) . '" name="' . esc_attr( $unique_id ) . '" ' . $df_checked . '/></div>', $product_id, $df_checked, 0 );
+										echo '<div class="woovr-variation-info">';
+										echo '<div class="woovr-variation-name"><label for="' . esc_attr( $radio_id ) . '">' . apply_filters( 'woovr_clear_name', $clear_label, $product ) . '</label></div>';
+										echo '<div class="woovr-variation-description">' . apply_filters( 'woovr_clear_description', '', $product ) . '</div>';
+										echo '</div><!-- /woovr-variation-info -->';
 
-									if ( ( $show_image === 'yes' ) && ( $clear_image !== 'none' ) ) {
+										do_action( 'woovr_variation_after' );
+
+										echo '</div><!-- /woovr-variation -->';
+									}
+
+									// radio buttons
+									foreach ( $children_data as $child_data ) {
+										$child_id      = $child_data['id'];
+										$child_product = $child_data['product'];
+										$child_attrs   = htmlspecialchars( json_encode( $child_data['attrs'] ), ENT_QUOTES, 'UTF-8' );
+										$diff_attrs    = array_diff( $child_data['attrs'], $df_attrs ); // find selected option
+										$child_checked = empty( $diff_attrs ) ? 'checked' : '';
+
+										// get name
+										if ( ( $custom_name = get_post_meta( $child_id, 'woovr_name', true ) ) && ! empty( $custom_name ) ) {
+											$child_name = $custom_name;
+										} else {
+											$child_name_arr = [];
+
+											foreach ( $child_data['attrs'] as $k => $a ) {
+												if ( $t = get_term_by( 'slug', $a, str_replace( 'attribute_', '', $k ) ) ) {
+													$n = $t->name;
+												} elseif ( $t = get_term_by( 'name', $a, str_replace( 'attribute_', '', $k ) ) ) {
+													$n = $t->name;
+												} else {
+													$n = $a;
+												}
+
+												if ( $show_name === 'formatted_label' ) {
+													$child_name_arr[] = wc_attribute_label( str_replace( 'attribute_', '', $k ), $product ) . ': ' . $n;
+												} else {
+													$child_name_arr[] = $n;
+												}
+											}
+
+											$child_name = implode( ', ', $child_name_arr );
+
+											if ( $product_name === 'yes' ) {
+												$child_name = $product->get_name() . ' – ' . $child_name;
+											}
+										}
+
+										// get image
+										if ( $child_product->get_image_id() && ( $child_image = wp_get_attachment_image_src( $child_product->get_image_id(), self::$image_size ) ) ) {
+											$child_image_src = $child_image[0];
+										} else {
+											$child_image_src = wc_placeholder_img_src();
+										}
+
+										// custom image
+										if ( ( $child_image_id = get_post_meta( $child_id, 'woovr_image_id', true ) ) && ( $child_image = wp_get_attachment_image_src( absint( $child_image_id ), self::$image_size ) ) ) {
+											$child_image_src = $child_image[0];
+										} elseif ( get_post_meta( $child_id, 'woovr_image', true ) ) {
+											$child_image_src = get_post_meta( $child_id, 'woovr_image', true );
+										}
+
+										$child_image_src = apply_filters( 'woovr_variation_image_src', $child_image_src, $child_product );
+										$child_images    = array_filter( explode( ',', get_post_meta( $child_id, 'wpcvi_images', true ) ) );
+										$data_attrs      = apply_filters( 'woovr_data_attributes', [
+											'id'            => $child_id,
+											'pid'           => $product_id,
+											'sku'           => $child_product->get_sku(),
+											'purchasable'   => self::is_purchasable( $child_product ) ? 'yes' : 'no',
+											'attrs'         => $child_attrs,
+											'price'         => wc_get_price_to_display( $child_product ),
+											'regular-price' => wc_get_price_to_display( $child_product, [ 'price' => $child_product->get_regular_price() ] ),
+											'pricehtml'     => htmlentities( $child_product->get_price_html() ),
+											'imagesrc'      => esc_url( $child_image_src ),
+											'availability'  => htmlentities( wc_get_stock_html( $child_product ) ),
+											'weight'        => htmlentities( wc_format_weight( $child_product->get_weight() ) ),
+											'dimensions'    => htmlentities( wc_format_dimensions( $child_product->get_dimensions( false ) ) ),
+											'images'        => ! empty( $child_images ) ? 'yes' : 'no'
+										], $child_product );
+
+										$child_class = 'woovr-variation woovr-variation-radio';
+
+										if ( $child_checked === 'checked' ) {
+											$child_class .= ' woovr-variation-active';
+										}
+
+										echo '<div class="' . esc_attr( apply_filters( 'woovr_variation_class', $child_class, $child_product ) ) . '" ' . self::data_attributes( $data_attrs ) . '>';
+
+										do_action( 'woovr_variation_before', $child_product );
+
+										$radio_id = 'woovr_' . $product_id . '_' . $child_id;
+										echo apply_filters( 'woovr_variation_radio_selector', '<div class="woovr-variation-selector"><input type="radio" id="' . esc_attr( $radio_id ) . '" name="' . esc_attr( $unique_id ) . '" ' . $child_checked . '/></div>', $product_id, $child_checked, $child_id );
+
+										if ( $show_image === 'yes' ) {
+											echo '<div class="woovr-variation-image"><img src="' . esc_url( $child_image_src ) . '" alt=""/></div>';
+										}
+
+										echo '<div class="woovr-variation-info">';
+										$child_info = '<div class="woovr-variation-name"><label for="' . esc_attr( $radio_id ) . '">' . apply_filters( 'woovr_variation_name', $child_name, $child_product ) . '</label></div>';
+
+										if ( $show_price === 'yes' ) {
+											$child_info .= '<div class="woovr-variation-price">' . apply_filters( 'woovr_variation_price', $child_product->get_price_html(), $child_product ) . '</div>';
+										}
+
+										if ( $show_availability === 'yes' ) {
+											$child_info .= '<div class="woovr-variation-availability">' . apply_filters( 'woovr_variation_availability', wc_get_stock_html( $child_product ), $child_product ) . '</div>';
+										}
+
+										if ( $show_description === 'yes' ) {
+											$child_info .= '<div class="woovr-variation-description">' . apply_filters( 'woovr_variation_description', $child_product->get_description(), $child_product ) . '</div>';
+										}
+
+										echo apply_filters( 'woovr_variation_info', $child_info, $child_product );
+										echo '</div><!-- /woovr-variation-info -->';
+
+										do_action( 'woovr_variation_after', $child_product );
+
+										echo '</div><!-- /woovr-variation -->';
+									}
+								} else {
+									// dropdown
+									echo '<div class="woovr-variation woovr-variation-dropdown">';
+
+									if ( ( $selector === 'select' ) && ( $show_image === 'yes' ) ) {
 										echo '<div class="woovr-variation-image">' . apply_filters( 'woovr_clear_image', '<img src="' . esc_url( $clear_image_src ) . '"/>', $product ) . '</div>';
 									}
 
-									echo '<div class="woovr-variation-info">';
-									echo '<div class="woovr-variation-name"><label for="' . esc_attr( $radio_id ) . '">' . apply_filters( 'woovr_clear_name', $clear_label, $product ) . '</label></div>';
-									echo '<div class="woovr-variation-description">' . apply_filters( 'woovr_clear_description', '', $product ) . '</div>';
-									echo '</div><!-- /woovr-variation-info -->';
+									echo '<div class="woovr-variation-selector"><select class="woovr-variation-select" id="' . esc_attr( $unique_id ) . '">';
 
-									do_action( 'woovr_variation_after' );
+									// show choose an option
+									if ( $show_clear === 'yes' ) {
+										$data_attrs = apply_filters( 'woovr_data_attributes_option_none', [
+											'id'            => 0,
+											'pid'           => $product_id,
+											'sku'           => '',
+											'purchasable'   => 'no',
+											'attrs'         => '',
+											'price'         => 0,
+											'regular-price' => 0,
+											'pricehtml'     => '',
+											'imagesrc'      => $show_image === 'yes' ? $clear_image_src : '',
+											'description'   => htmlentities( apply_filters( 'woovr_clear_description', '', $product ) ),
+											'availability'  => ''
+										] );
+										echo '<option value="0" ' . self::data_attributes( $data_attrs ) . '>' . apply_filters( 'woovr_clear_name', $clear_label, $product ) . '</option>';
+									}
+
+									foreach ( $children_data as $child_data ) {
+										$child_id      = $child_data['id'];
+										$child_product = $child_data['product'];
+										$child_attrs   = htmlspecialchars( json_encode( $child_data['attrs'] ), ENT_QUOTES, 'UTF-8' );
+
+										// get name
+										if ( ( $custom_name = get_post_meta( $child_id, 'woovr_name', true ) ) && ! empty( $custom_name ) ) {
+											$child_name = $custom_name;
+										} else {
+											$child_name_arr = [];
+
+											foreach ( $child_data['attrs'] as $k => $a ) {
+												if ( $t = get_term_by( 'slug', $a, str_replace( 'attribute_', '', $k ) ) ) {
+													$n = $t->name;
+												} elseif ( $t = get_term_by( 'name', $a, str_replace( 'attribute_', '', $k ) ) ) {
+													$n = $t->name;
+												} else {
+													$n = $a;
+												}
+
+												if ( $show_name === 'formatted_label' ) {
+													$child_name_arr[] = wc_attribute_label( str_replace( 'attribute_', '', $k ), $product ) . ': ' . $n;
+												} else {
+													$child_name_arr[] = $n;
+												}
+											}
+
+											$child_name = implode( ', ', $child_name_arr );
+
+											if ( $product_name === 'yes' ) {
+												$child_name = $product->get_name() . ' – ' . $child_name;
+											}
+										}
+
+										// get image
+										if ( $child_product->get_image_id() && ( $child_image = wp_get_attachment_image_src( $child_product->get_image_id(), self::$image_size ) ) ) {
+											$child_image_src = $child_image[0];
+										} else {
+											$child_image_src = wc_placeholder_img_src();
+										}
+
+										// custom image
+										if ( ( $child_image_id = get_post_meta( $child_id, 'woovr_image_id', true ) ) && ( $child_image = wp_get_attachment_image_src( absint( $child_image_id ), self::$image_size ) ) ) {
+											$child_image_src = $child_image[0];
+										} elseif ( get_post_meta( $child_id, 'woovr_image', true ) ) {
+											$child_image_src = esc_url( get_post_meta( $child_id, 'woovr_image', true ) );
+										}
+
+										$child_image_src = esc_url( apply_filters( 'woovr_variation_image_src', $child_image_src, $child_product ) );
+
+										// get info
+										$child_info = '';
+
+										if ( $show_price === 'yes' ) {
+											$child_info .= '<span class="woovr-variation-price">' . apply_filters( 'woovr_variation_price', $child_product->get_price_html(), $child_product ) . '</span>';
+										}
+
+										if ( $show_availability === 'yes' ) {
+											$child_info .= '<span class="woovr-variation-availability">' . apply_filters( 'woovr_variation_availability', wc_get_stock_html( $child_product ), $child_product ) . '</span>';
+										}
+
+										if ( $show_description === 'yes' ) {
+											$child_info .= '<span class="woovr-variation-description">' . apply_filters( 'woovr_variation_description', $child_product->get_description(), $child_product ) . '</span>';
+										}
+
+										$data_attrs = apply_filters( 'woovr_data_attributes', [
+											'id'            => $child_id,
+											'pid'           => $product_id,
+											'sku'           => $child_product->get_sku(),
+											'purchasable'   => self::is_purchasable( $child_product ) ? 'yes' : 'no',
+											'attrs'         => $child_attrs,
+											'price'         => wc_get_price_to_display( $child_product ),
+											'regular-price' => wc_get_price_to_display( $child_product, [ 'price' => $child_product->get_regular_price() ] ),
+											'pricehtml'     => htmlentities( $child_product->get_price_html() ),
+											'imagesrc'      => $show_image === 'yes' ? $child_image_src : '',
+											'description'   => htmlentities( apply_filters( 'woovr_variation_info', $child_info, $child_product ) ),
+											'availability'  => htmlentities( wc_get_stock_html( $child_product ) )
+										], $child_product );
+										$diff_attrs = array_diff( $child_data['attrs'], $df_attrs ); // find selected option
+
+										echo '<option value="' . esc_attr( $child_id ) . '" ' . self::data_attributes( $data_attrs ) . ' ' . esc_attr( empty( $diff_attrs ) ? 'selected' : '' ) . '>' . apply_filters( 'woovr_variation_name', $child_name, $child_product ) . '</option>';
+									}
+
+									echo '</select></div><!-- /woovr-variation-selector -->';
+
+									if ( ( $selector === 'select' ) && ( $show_price === 'yes' ) ) {
+										echo '<div class="woovr-variation-price"></div>';
+									}
 
 									echo '</div><!-- /woovr-variation -->';
 								}
 
-								// radio buttons
-								foreach ( $children_data as $child_data ) {
-									$child_id      = $child_data['id'];
-									$child_product = $child_data['product'];
-									$child_attrs   = htmlspecialchars( json_encode( $child_data['attrs'] ), ENT_QUOTES, 'UTF-8' );
-									$diff_attrs    = array_diff( $child_data['attrs'], $df_attrs ); // find selected option
-									$child_checked = empty( $diff_attrs ) ? 'checked' : '';
+								do_action( 'woovr_variations_after', $product );
 
-									// get name
-									if ( ( $custom_name = get_post_meta( $child_id, 'woovr_name', true ) ) && ! empty( $custom_name ) ) {
-										$child_name = $custom_name;
-									} else {
-										$child_name_arr = [];
+								echo '</div><!-- /woovr-variations -->';
 
-										foreach ( $child_data['attrs'] as $k => $a ) {
-											if ( $t = get_term_by( 'slug', $a, str_replace( 'attribute_', '', $k ) ) ) {
-												$n = $t->name;
-											} elseif ( $t = get_term_by( 'name', $a, str_replace( 'attribute_', '', $k ) ) ) {
-												$n = $t->name;
-											} else {
-												$n = $a;
-											}
-
-											if ( $show_name === 'formatted_label' ) {
-												$child_name_arr[] = wc_attribute_label( str_replace( 'attribute_', '', $k ), $product ) . ': ' . $n;
-											} else {
-												$child_name_arr[] = $n;
-											}
-										}
-
-										$child_name = implode( ', ', $child_name_arr );
-
-										if ( $product_name === 'yes' ) {
-											$child_name = $product->get_name() . ' – ' . $child_name;
-										}
-									}
-
-									// get image
-									if ( $child_product->get_image_id() && ( $child_image = wp_get_attachment_image_src( $child_product->get_image_id(), self::$image_size ) ) ) {
-										$child_image_src = $child_image[0];
-									} else {
-										$child_image_src = wc_placeholder_img_src();
-									}
-
-									// custom image
-									if ( ( $child_image_id = get_post_meta( $child_id, 'woovr_image_id', true ) ) && ( $child_image = wp_get_attachment_image_src( absint( $child_image_id ), self::$image_size ) ) ) {
-										$child_image_src = $child_image[0];
-									} elseif ( get_post_meta( $child_id, 'woovr_image', true ) ) {
-										$child_image_src = get_post_meta( $child_id, 'woovr_image', true );
-									}
-
-									$child_image_src = apply_filters( 'woovr_variation_image_src', $child_image_src, $child_product );
-									$child_images    = array_filter( explode( ',', get_post_meta( $child_id, 'wpcvi_images', true ) ) );
-									$data_attrs      = apply_filters( 'woovr_data_attributes', [
-										'id'            => $child_id,
-										'pid'           => $product_id,
-										'sku'           => $child_product->get_sku(),
-										'purchasable'   => self::is_purchasable( $child_product ) ? 'yes' : 'no',
-										'attrs'         => $child_attrs,
-										'price'         => wc_get_price_to_display( $child_product ),
-										'regular-price' => wc_get_price_to_display( $child_product, [ 'price' => $child_product->get_regular_price() ] ),
-										'pricehtml'     => htmlentities( $child_product->get_price_html() ),
-										'imagesrc'      => esc_url( $child_image_src ),
-										'availability'  => htmlentities( wc_get_stock_html( $child_product ) ),
-										'weight'        => htmlentities( wc_format_weight( $child_product->get_weight() ) ),
-										'dimensions'    => htmlentities( wc_format_dimensions( $child_product->get_dimensions( false ) ) ),
-										'images'        => ! empty( $child_images ) ? 'yes' : 'no'
-									], $child_product );
-
-									$child_class = 'woovr-variation woovr-variation-radio';
-
-									if ( $child_checked === 'checked' ) {
-										$child_class .= ' woovr-variation-active';
-									}
-
-									echo '<div class="' . esc_attr( apply_filters( 'woovr_variation_class', $child_class, $child_product ) ) . '" ' . self::data_attributes( $data_attrs ) . '>';
-
-									do_action( 'woovr_variation_before', $child_product );
-
-									$radio_id = 'woovr_' . $product_id . '_' . $child_id;
-									echo apply_filters( 'woovr_variation_radio_selector', '<div class="woovr-variation-selector"><input type="radio" id="' . esc_attr( $radio_id ) . '" name="' . esc_attr( $unique_id ) . '" ' . $child_checked . '/></div>', $product_id, $child_checked, $child_id );
-
-									if ( $show_image === 'yes' ) {
-										echo '<div class="woovr-variation-image"><img src="' . esc_url( $child_image_src ) . '" alt=""/></div>';
-									}
-
-									echo '<div class="woovr-variation-info">';
-									$child_info = '<div class="woovr-variation-name"><label for="' . esc_attr( $radio_id ) . '">' . apply_filters( 'woovr_variation_name', $child_name, $child_product ) . '</label></div>';
-
-									if ( $show_price === 'yes' ) {
-										$child_info .= '<div class="woovr-variation-price">' . apply_filters( 'woovr_variation_price', $child_product->get_price_html(), $child_product ) . '</div>';
-									}
-
-									if ( $show_availability === 'yes' ) {
-										$child_info .= '<div class="woovr-variation-availability">' . apply_filters( 'woovr_variation_availability', wc_get_stock_html( $child_product ), $child_product ) . '</div>';
-									}
-
-									if ( $show_description === 'yes' ) {
-										$child_info .= '<div class="woovr-variation-description">' . apply_filters( 'woovr_variation_description', $child_product->get_description(), $child_product ) . '</div>';
-									}
-
-									echo apply_filters( 'woovr_variation_info', $child_info, $child_product );
-									echo '</div><!-- /woovr-variation-info -->';
-
-									do_action( 'woovr_variation_after', $child_product );
-
-									echo '</div><!-- /woovr-variation -->';
-								}
-							} else {
-								// dropdown
-								echo '<div class="woovr-variation woovr-variation-dropdown">';
-
-								if ( ( $selector === 'select' ) && ( $show_image === 'yes' ) ) {
-									echo '<div class="woovr-variation-image">' . apply_filters( 'woovr_clear_image', '<img src="' . esc_url( $clear_image_src ) . '"/>', $product ) . '</div>';
-								}
-
-								echo '<div class="woovr-variation-selector"><select class="woovr-variation-select" id="' . esc_attr( $unique_id ) . '">';
-
-								// show choose an option
-								if ( $show_clear === 'yes' ) {
-									$data_attrs = apply_filters( 'woovr_data_attributes_option_none', [
-										'id'            => 0,
-										'pid'           => $product_id,
-										'sku'           => '',
-										'purchasable'   => 'no',
-										'attrs'         => '',
-										'price'         => 0,
-										'regular-price' => 0,
-										'pricehtml'     => '',
-										'imagesrc'      => $show_image === 'yes' ? $clear_image_src : '',
-										'description'   => htmlentities( apply_filters( 'woovr_clear_description', '', $product ) ),
-										'availability'  => ''
-									] );
-									echo '<option value="0" ' . self::data_attributes( $data_attrs ) . '>' . apply_filters( 'woovr_clear_name', $clear_label, $product ) . '</option>';
-								}
-
-								foreach ( $children_data as $child_data ) {
-									$child_id      = $child_data['id'];
-									$child_product = $child_data['product'];
-									$child_attrs   = htmlspecialchars( json_encode( $child_data['attrs'] ), ENT_QUOTES, 'UTF-8' );
-
-									// get name
-									if ( ( $custom_name = get_post_meta( $child_id, 'woovr_name', true ) ) && ! empty( $custom_name ) ) {
-										$child_name = $custom_name;
-									} else {
-										$child_name_arr = [];
-
-										foreach ( $child_data['attrs'] as $k => $a ) {
-											if ( $t = get_term_by( 'slug', $a, str_replace( 'attribute_', '', $k ) ) ) {
-												$n = $t->name;
-											} elseif ( $t = get_term_by( 'name', $a, str_replace( 'attribute_', '', $k ) ) ) {
-												$n = $t->name;
-											} else {
-												$n = $a;
-											}
-
-											if ( $show_name === 'formatted_label' ) {
-												$child_name_arr[] = wc_attribute_label( str_replace( 'attribute_', '', $k ), $product ) . ': ' . $n;
-											} else {
-												$child_name_arr[] = $n;
-											}
-										}
-
-										$child_name = implode( ', ', $child_name_arr );
-
-										if ( $product_name === 'yes' ) {
-											$child_name = $product->get_name() . ' – ' . $child_name;
-										}
-									}
-
-									// get image
-									if ( $child_product->get_image_id() && ( $child_image = wp_get_attachment_image_src( $child_product->get_image_id(), self::$image_size ) ) ) {
-										$child_image_src = $child_image[0];
-									} else {
-										$child_image_src = wc_placeholder_img_src();
-									}
-
-									// custom image
-									if ( ( $child_image_id = get_post_meta( $child_id, 'woovr_image_id', true ) ) && ( $child_image = wp_get_attachment_image_src( absint( $child_image_id ), self::$image_size ) ) ) {
-										$child_image_src = $child_image[0];
-									} elseif ( get_post_meta( $child_id, 'woovr_image', true ) ) {
-										$child_image_src = esc_url( get_post_meta( $child_id, 'woovr_image', true ) );
-									}
-
-									$child_image_src = esc_url( apply_filters( 'woovr_variation_image_src', $child_image_src, $child_product ) );
-
-									// get info
-									$child_info = '';
-
-									if ( $show_price === 'yes' ) {
-										$child_info .= '<span class="woovr-variation-price">' . apply_filters( 'woovr_variation_price', $child_product->get_price_html(), $child_product ) . '</span>';
-									}
-
-									if ( $show_availability === 'yes' ) {
-										$child_info .= '<span class="woovr-variation-availability">' . apply_filters( 'woovr_variation_availability', wc_get_stock_html( $child_product ), $child_product ) . '</span>';
-									}
-
-									if ( $show_description === 'yes' ) {
-										$child_info .= '<span class="woovr-variation-description">' . apply_filters( 'woovr_variation_description', $child_product->get_description(), $child_product ) . '</span>';
-									}
-
-									$data_attrs = apply_filters( 'woovr_data_attributes', [
-										'id'            => $child_id,
-										'pid'           => $product_id,
-										'sku'           => $child_product->get_sku(),
-										'purchasable'   => self::is_purchasable( $child_product ) ? 'yes' : 'no',
-										'attrs'         => $child_attrs,
-										'price'         => wc_get_price_to_display( $child_product ),
-										'regular-price' => wc_get_price_to_display( $child_product, [ 'price' => $child_product->get_regular_price() ] ),
-										'pricehtml'     => htmlentities( $child_product->get_price_html() ),
-										'imagesrc'      => $show_image === 'yes' ? $child_image_src : '',
-										'description'   => htmlentities( apply_filters( 'woovr_variation_info', $child_info, $child_product ) ),
-										'availability'  => htmlentities( wc_get_stock_html( $child_product ) )
-									], $child_product );
-									$diff_attrs = array_diff( $child_data['attrs'], $df_attrs ); // find selected option
-
-									echo '<option value="' . esc_attr( $child_id ) . '" ' . self::data_attributes( $data_attrs ) . ' ' . esc_attr( empty( $diff_attrs ) ? 'selected' : '' ) . '>' . apply_filters( 'woovr_variation_name', $child_name, $child_product ) . '</option>';
-								}
-
-								echo '</select></div><!-- /woovr-variation-selector -->';
-
-								if ( ( $selector === 'select' ) && ( $show_price === 'yes' ) ) {
-									echo '<div class="woovr-variation-price"></div>';
-								}
-
-								echo '</div><!-- /woovr-variation -->';
+								do_action( 'woovr_variations_below', $product );
 							}
+						}
 
-							do_action( 'woovr_variations_after', $product );
+						$variations_form = ob_get_clean();
 
-							echo '</div><!-- /woovr-variations -->';
-
-							do_action( 'woovr_variations_below', $product );
+						if ( self::enable_cache( $context ) ) {
+							set_transient( $cache_id, $variations_form, 24 * HOUR_IN_SECONDS );
 						}
 					}
+
+					echo apply_filters( 'woovr_variations_form', $variations_form, $product, $variation, $context, $allowed_terms );
 				}
 
 				function wpcsm_locations( $locations ) {
