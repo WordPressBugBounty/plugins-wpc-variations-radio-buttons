@@ -3,7 +3,7 @@
  * Plugin Name: WPC Variations Radio Buttons for WooCommerce
  * Plugin URI: https://wpclever.net/
  * Description: WPC Variations Radio Buttons will replace dropdown select with radio buttons for the buyer easier in selecting the variations.
- * Version: 3.6.2
+ * Version: 3.7.0
  * Author: WPClever
  * Author URI: https://wpclever.net
  * Text Domain: wpc-variations-radio-buttons
@@ -12,14 +12,14 @@
  * Requires at least: 4.0
  * Tested up to: 6.8
  * WC requires at least: 3.0
- * WC tested up to: 9.9
+ * WC tested up to: 10.0
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.6.2' );
+! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.7.0' );
 ! defined( 'WOOVR_LITE' ) && define( 'WOOVR_LITE', __FILE__ );
 ! defined( 'WOOVR_FILE' ) && define( 'WOOVR_FILE', __FILE__ );
 ! defined( 'WOOVR_URI' ) && define( 'WOOVR_URI', plugin_dir_url( __FILE__ ) );
@@ -192,6 +192,8 @@ if ( ! function_exists( 'woovr_init' ) ) {
 								$active             = self::get_setting( 'active', 'yes' );
 								$hide_unpurchasable = self::get_setting( 'hide_unpurchasable', 'no' );
 								$selector           = self::get_setting( 'selector', 'default' );
+								$orderby            = self::get_setting( 'orderby', 'default' );
+								$order              = self::get_setting( 'order', 'default' );
 								$show_name          = self::get_setting( 'variation_name', 'formatted' );
 								$product_name       = self::get_setting( 'product_name', 'yes' );
 								$show_clear         = self::get_setting( 'show_clear', 'yes' );
@@ -300,6 +302,26 @@ if ( ! function_exists( 'woovr_init' ) ) {
                                                            class="woovr_image_add button"><?php esc_attr_e( 'Choose Image', 'wpc-variations-radio-buttons' ); ?></a>
 													</span>
                                                 </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><?php esc_html_e( 'Order by', 'wpc-variations-radio-buttons' ); ?></th>
+                                            <td>
+                                                <label> <select name="woovr_settings[orderby]">
+                                                        <option value="default" <?php selected( $orderby, 'default' ); ?>><?php esc_html_e( 'Default', 'wpc-variations-radio-buttons' ); ?></option>
+                                                        <option value="name" <?php selected( $orderby, 'name' ); ?>><?php esc_html_e( 'Name', 'wpc-variations-radio-buttons' ); ?></option>
+                                                        <option value="price" <?php selected( $orderby, 'price' ); ?>><?php esc_html_e( 'Price', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    </select> </label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><?php esc_html_e( 'Order', 'wpc-variations-radio-buttons' ); ?></th>
+                                            <td>
+                                                <label> <select name="woovr_settings[order]">
+                                                        <option value="default" <?php selected( $order, 'default' ); ?>><?php esc_html_e( 'Default', 'wpc-variations-radio-buttons' ); ?></option>
+                                                        <option value="asc" <?php selected( $order, 'asc' ); ?>><?php esc_html_e( 'ASC', 'wpc-variations-radio-buttons' ); ?></option>
+                                                        <option value="desc" <?php selected( $order, 'desc' ); ?>><?php esc_html_e( 'DESC', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    </select> </label>
                                             </td>
                                         </tr>
                                         <tr>
@@ -723,6 +745,8 @@ if ( ! function_exists( 'woovr_init' ) ) {
 
 						// settings
 						$selector          = apply_filters( 'woovr_default_selector', self::get_setting( 'selector', 'default' ), $product, $variation, $context );
+						$orderby           = apply_filters( 'woovr_default_orderby', self::get_setting( 'orderby', 'default' ), $product, $variation, $context );
+						$order             = apply_filters( 'woovr_default_order', self::get_setting( 'order', 'default' ), $product, $variation, $context );
 						$show_name         = apply_filters( 'woovr_default_variation_name', self::get_setting( 'variation_name', 'formatted' ), $product, $variation, $context );
 						$product_name      = apply_filters( 'woovr_default_product_name', self::get_setting( 'product_name', 'yes' ), $product, $variation, $context );
 						$show_image        = apply_filters( 'woovr_default_show_image', self::get_setting( 'show_image', 'yes' ), $product, $variation, $context );
@@ -736,6 +760,8 @@ if ( ! function_exists( 'woovr_init' ) ) {
 						if ( $active === 'yes' ) {
 							// overwrite settings
 							$selector          = get_post_meta( $product_id, '_woovr_selector', true ) ?: $selector;
+							$orderby           = get_post_meta( $product_id, '_woovr_orderby', true ) ?: $orderby;
+							$order             = get_post_meta( $product_id, '_woovr_order', true ) ?: $order;
 							$show_name         = get_post_meta( $product_id, '_woovr_variation_name', true ) ?: $show_name;
 							$show_image        = get_post_meta( $product_id, '_woovr_show_image', true ) ?: $show_image;
 							$show_price        = get_post_meta( $product_id, '_woovr_show_price', true ) ?: $show_price;
@@ -755,6 +781,8 @@ if ( ! function_exists( 'woovr_init' ) ) {
 						$clear_image       = apply_filters( 'woovr_clear_image', $clear_image, $product, $variation, $context );
 						$clear_image_id    = apply_filters( 'woovr_clear_image_id', $clear_image_id, $product, $variation, $context );
 						$selector          = apply_filters( 'woovr_selector', $selector, $product, $variation, $context );
+						$orderby           = apply_filters( 'woovr_orderby', $orderby, $product, $variation, $context );
+						$order             = apply_filters( 'woovr_order', $order, $product, $variation, $context );
 						$show_name         = apply_filters( 'woovr_show_name', $show_name, $product, $variation, $context );
 						$show_image        = apply_filters( 'woovr_show_image', $show_image, $product, $variation, $context );
 						$show_price        = apply_filters( 'woovr_show_price', $show_price, $product, $variation, $context );
@@ -870,12 +898,25 @@ if ( ! function_exists( 'woovr_init' ) ) {
 									$children_data[] = [
 										'id'      => $child,
 										'product' => $child_product,
+										'name'    => get_post_meta( $child, 'woovr_name', true ) ?: $child_product->get_formatted_name(),
+										'price'   => $child_product->get_price(),
 										'attrs'   => $attr
 									];
 								}
 							}
 
 							$children_data = apply_filters( 'woovr_get_children_data', $children_data, $product );
+
+							// order
+							if ( is_string( $orderby ) && ! empty( $orderby ) && ( $orderby !== 'default' ) ) {
+								array_multisort( array_column( $children_data, $orderby ), SORT_ASC, $children_data );
+							}
+
+							if ( ! empty( $order ) && ( $order === 'desc' ) ) {
+								$children_data = array_reverse( $children_data );
+							}
+
+							$children_data = apply_filters( 'woovr_get_children_ordered_data', $children_data, $product );
 
 							if ( ! empty( $children_data ) ) {
 								do_action( 'woovr_variations_above', $product );
