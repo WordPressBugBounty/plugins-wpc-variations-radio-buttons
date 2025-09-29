@@ -3,7 +3,7 @@
  * Plugin Name: WPC Variations Radio Buttons for WooCommerce
  * Plugin URI: https://wpclever.net/
  * Description: WPC Variations Radio Buttons will replace dropdown select with radio buttons for the buyer easier in selecting the variations.
- * Version: 3.7.0
+ * Version: 3.7.1
  * Author: WPClever
  * Author URI: https://wpclever.net
  * Text Domain: wpc-variations-radio-buttons
@@ -12,14 +12,14 @@
  * Requires at least: 4.0
  * Tested up to: 6.8
  * WC requires at least: 3.0
- * WC tested up to: 10.0
+ * WC tested up to: 10.2
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.7.0' );
+! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.7.1' );
 ! defined( 'WOOVR_LITE' ) && define( 'WOOVR_LITE', __FILE__ );
 ! defined( 'WOOVR_FILE' ) && define( 'WOOVR_FILE', __FILE__ );
 ! defined( 'WOOVR_URI' ) && define( 'WOOVR_URI', plugin_dir_url( __FILE__ ) );
@@ -926,7 +926,7 @@ if ( ! function_exists( 'woovr_init' ) ) {
 								do_action( 'woovr_variations_before', $product );
 								// should add a fieldset and legend
 
-								if ( $selector === 'default' || $selector === 'grid' || $selector === 'grid-2' || $selector === 'grid-3' || $selector === 'grid-4' ) {
+								if ( in_array( $selector, [ 'default', 'grid', 'grid-2', 'grid-3', 'grid-4' ] ) ) {
 									// show choose an option
 									if ( $show_clear === 'yes' ) {
 										$data_attrs = apply_filters( 'woovr_data_attributes_option_none', [
