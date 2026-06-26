@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WPC Variations Radio Buttons for WooCommerce 3.8.1\n"
+"Project-Id-Version: WPC Variations Radio Buttons for WooCommerce 3.8.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpc-variations-radio-buttons\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-28T03:12:30+00:00\n"
+"POT-Creation-Date: 2026-06-26T02:49:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wpc-variations-radio-buttons\n"
@@ -166,8 +166,8 @@ msgid "\"Option none\" label"
 msgstr ""
 
 #: includes/class-backend.php:197
-#: wpc-variations-radio-buttons.php:217
-#: wpc-variations-radio-buttons.php:237
+#: wpc-variations-radio-buttons.php:215
+#: wpc-variations-radio-buttons.php:235
 msgid "Choose an option"
 msgstr ""
 
@@ -317,26 +317,26 @@ msgstr ""
 msgid "- OR - Custom image URL"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:678
+#: wpc-variations-radio-buttons.php:676
 msgid "Before variations wrap"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:679
+#: wpc-variations-radio-buttons.php:677
 msgid "After variations wrap"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:680
+#: wpc-variations-radio-buttons.php:678
 msgid "Before variations"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:681
+#: wpc-variations-radio-buttons.php:679
 msgid "After variations"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:682
+#: wpc-variations-radio-buttons.php:680
 msgid "Before variation"
 msgstr ""
 
-#: wpc-variations-radio-buttons.php:683
+#: wpc-variations-radio-buttons.php:681
 msgid "After variation"
 msgstr ""

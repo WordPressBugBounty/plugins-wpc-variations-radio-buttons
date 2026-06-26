@@ -92,7 +92,7 @@ if ( ! class_exists( 'WPClever_Woovr_Backend' ) ) {
                     </div>
                 </div>
                 <h2></h2>
-                <?php if ( isset( $_GET['settings-updated'] ) && sanitize_text_field( wp_unslash( $_GET['settings-updated'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+                <?php if ( isset( $_GET['settings-updated'] ) && sanitize_text_field( wp_unslash( $_GET['settings-updated'] ?? '' ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
                     <div class="notice notice-success is-dismissible">
                         <p><?php esc_html_e( 'Settings updated.', 'wpc-variations-radio-buttons' ); ?></p>
                     </div>
@@ -495,7 +495,7 @@ if ( ! class_exists( 'WPClever_Woovr_Backend' ) ) {
         function process_product_meta( $post_id ) {
             // phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce verified by WooCommerce
             if ( isset( $_POST['_woovr_active'] ) ) {
-                update_post_meta( $post_id, '_woovr_active', sanitize_text_field( wp_unslash( $_POST['_woovr_active'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+                update_post_meta( $post_id, '_woovr_active', sanitize_text_field( wp_unslash( $_POST['_woovr_active'] ?? '' ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
             } else {
                 delete_post_meta( $post_id, '_woovr_active' );
             }
@@ -544,21 +544,21 @@ if ( ! class_exists( 'WPClever_Woovr_Backend' ) ) {
         function save_variation_settings( $post_id ) {
             // phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce verified by WooCommerce
             if ( isset( $_POST['woovr_name'][ $post_id ] ) ) {
-                update_post_meta( $post_id, 'woovr_name', sanitize_text_field( wp_unslash( $_POST['woovr_name'][ $post_id ] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+                update_post_meta( $post_id, 'woovr_name', sanitize_text_field( wp_unslash( $_POST['woovr_name'] ?? ''[ $post_id ] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
             } else {
                 delete_post_meta( $post_id, 'woovr_name' );
             }
 
             // phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce verified by WooCommerce
             if ( isset( $_POST['woovr_image'][ $post_id ] ) ) {
-                update_post_meta( $post_id, 'woovr_image', sanitize_url( wp_unslash( $_POST['woovr_image'][ $post_id ] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+                update_post_meta( $post_id, 'woovr_image', sanitize_url( wp_unslash( $_POST['woovr_image'] ?? ''[ $post_id ] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
             } else {
                 delete_post_meta( $post_id, 'woovr_image' );
             }
 
             // phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce verified by WooCommerce
             if ( isset( $_POST['woovr_image_id'][ $post_id ] ) ) {
-                update_post_meta( $post_id, 'woovr_image_id', sanitize_text_field( wp_unslash( $_POST['woovr_image_id'][ $post_id ] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+                update_post_meta( $post_id, 'woovr_image_id', sanitize_text_field( wp_unslash( $_POST['woovr_image_id'] ?? ''[ $post_id ] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
             } else {
                 delete_post_meta( $post_id, 'woovr_image_id' );
             }
