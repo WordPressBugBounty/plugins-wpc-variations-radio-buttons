@@ -3,7 +3,7 @@
  * Plugin Name: WPC Variations Radio Buttons for WooCommerce
  * Plugin URI: https://wpclever.net/
  * Description: WPC Variations Radio Buttons will replace dropdown select with radio buttons for the buyer easier in selecting the variations.
- * Version: 3.8.2
+ * Version: 3.8.3
  * Author: WPClever
  * Author URI: https://wpclever.net
  * Text Domain: wpc-variations-radio-buttons
@@ -19,7 +19,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.8.2' );
+! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.8.3' );
 ! defined( 'WOOVR_LITE' ) && define( 'WOOVR_LITE', __FILE__ );
 ! defined( 'WOOVR_FILE' ) && define( 'WOOVR_FILE', __FILE__ );
 ! defined( 'WOOVR_URI' ) && define( 'WOOVR_URI', plugin_dir_url( __FILE__ ) );
