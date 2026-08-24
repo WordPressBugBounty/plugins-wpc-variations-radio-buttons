@@ -1,25 +1,25 @@
 <?php
-/**
- * Plugin Name: WPC Variations Radio Buttons for WooCommerce
- * Plugin URI: https://wpclever.net/
- * Description: WPC Variations Radio Buttons will replace dropdown select with radio buttons for the buyer easier in selecting the variations.
- * Version: 3.8.3
- * Author: WPClever
- * Author URI: https://wpclever.net
- * Text Domain: wpc-variations-radio-buttons
- * Domain Path: /languages/
- * Requires Plugins: woocommerce
- * Requires at least: 5.9
- * Tested up to: 7.0
- * WC requires at least: 3.0
- * WC tested up to: 10.9
- * License: GPLv2 or later
- * * License URI: http://www.gnu.org/licenses/gpl-2.0.html
- */
+/*
+Plugin Name: WPC Variations Radio Buttons for WooCommerce
+Plugin URI: https://wpclever.net/
+Description: WPC Variations Radio Buttons will replace dropdown select with radio buttons for the buyer easier in selecting the variations.
+Version: 3.8.4
+Author: WPClever
+Author URI: https://wpclever.net
+Text Domain: wpc-variations-radio-buttons
+Domain Path: /languages/
+Requires Plugins: woocommerce
+Requires at least: 5.9
+Tested up to: 7.1
+WC requires at least: 3.0
+WC tested up to: 11.0
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.8.3' );
+! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.8.4' );
 ! defined( 'WOOVR_LITE' ) && define( 'WOOVR_LITE', __FILE__ );
 ! defined( 'WOOVR_FILE' ) && define( 'WOOVR_FILE', __FILE__ );
 ! defined( 'WOOVR_URI' ) && define( 'WOOVR_URI', plugin_dir_url( __FILE__ ) );
