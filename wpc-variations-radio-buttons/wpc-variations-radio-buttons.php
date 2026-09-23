@@ -3,28 +3,27 @@
 Plugin Name: WPC Variations Radio Buttons for WooCommerce
 Plugin URI: https://wpclever.net/
 Description: WPC Variations Radio Buttons will replace dropdown select with radio buttons for the buyer easier in selecting the variations.
-Version: 3.8.4
 Author: WPClever
 Author URI: https://wpclever.net
 Text Domain: wpc-variations-radio-buttons
 Domain Path: /languages/
 Requires Plugins: woocommerce
+Version: 3.9.0
 Requires at least: 5.9
-Tested up to: 7.1
 WC requires at least: 3.0
-WC tested up to: 11.0
+WC tested up to: 11.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.8.4' );
+! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.9.0' );
 ! defined( 'WOOVR_LITE' ) && define( 'WOOVR_LITE', __FILE__ );
 ! defined( 'WOOVR_FILE' ) && define( 'WOOVR_FILE', __FILE__ );
 ! defined( 'WOOVR_URI' ) && define( 'WOOVR_URI', plugin_dir_url( __FILE__ ) );
 ! defined( 'WOOVR_DIR' ) && define( 'WOOVR_DIR', plugin_dir_path( __FILE__ ) );
-! defined( 'WOOVR_SUPPORT' ) && define( 'WOOVR_SUPPORT', 'https://wpclever.net/support?utm_source=support&utm_medium=woovr&utm_campaign=wporg' );
+! defined( 'WOOVR_SUPPORT' ) && define( 'WOOVR_SUPPORT', 'https://wpclever.net/support/?utm_source=support&utm_medium=woovr&utm_campaign=wporg' );
 ! defined( 'WOOVR_REVIEWS' ) && define( 'WOOVR_REVIEWS', 'https://wordpress.org/support/plugin/wpc-variations-radio-buttons/reviews/' );
 ! defined( 'WOOVR_CHANGELOG' ) && define( 'WOOVR_CHANGELOG', 'https://wordpress.org/plugins/wpc-variations-radio-buttons/#developers' );
 ! defined( 'WOOVR_DISCUSSION' ) && define( 'WOOVR_DISCUSSION', 'https://wordpress.org/support/plugin/wpc-variations-radio-buttons' );

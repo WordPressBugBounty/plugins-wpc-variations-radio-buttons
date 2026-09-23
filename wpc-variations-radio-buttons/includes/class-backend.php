@@ -67,54 +67,75 @@ if ( ! class_exists( 'WPClever_Woovr_Backend' ) ) {
         }
 
         function admin_menu_content() {
-            $active_tab = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $active_tab  = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $title_badge = esc_html__( 'Settings', 'wpc-variations-radio-buttons' );
+            if ( $active_tab === 'premium' ) {
+                $title_badge = esc_html__( 'Premium', 'wpc-variations-radio-buttons' );
+            }
             ?>
-            <div class="wpclever_settings_page wrap">
-                <div class="wpclever_settings_page_header">
-                    <a class="wpclever_settings_page_header_logo" href="https://wpclever.net/"
-                       target="_blank" title="Visit wpclever.net"></a>
-                    <div class="wpclever_settings_page_header_text">
-                        <div class="wpclever_settings_page_title"><?php echo esc_html__( 'WPC Variations Radio Buttons', 'wpc-variations-radio-buttons' ) . ' ' . esc_html( WOOVR_VERSION ) . ' ' . ( defined( 'WOOVR_PREMIUM' ) ? '<span class="premium" style="display: none">' . esc_html__( 'Premium', 'wpc-variations-radio-buttons' ) . '</span>' : '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
-                        <div class="wpclever_settings_page_desc about-text">
-                            <p>
-                                <?php printf( /* translators: stars */ esc_html__( 'Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating.', 'wpc-variations-radio-buttons' ), '<span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                                <br/>
-                                <a href="<?php echo esc_url( WOOVR_REVIEWS ); ?>"
-                                   target="_blank"><?php esc_html_e( 'Reviews', 'wpc-variations-radio-buttons' ); ?></a>
-                                |
-                                <a href="<?php echo esc_url( WOOVR_CHANGELOG ); ?>"
-                                   target="_blank"><?php esc_html_e( 'Changelog', 'wpc-variations-radio-buttons' ); ?></a>
-                                |
-                                <a href="<?php echo esc_url( WOOVR_DISCUSSION ); ?>"
-                                   target="_blank"><?php esc_html_e( 'Discussion', 'wpc-variations-radio-buttons' ); ?></a>
-                            </p>
+            <div class="wrap woovr-settings-wrap">
+                <div class="woovr-settings-header">
+                    <div class="woovr-settings-header-inner">
+                        <div class="woovr-header-left">
+                            <div class="woovr-logo">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="6" cy="6" r="4"/>
+                                    <circle cx="6" cy="6" r="1.5" fill="currentColor"/>
+                                    <line x1="13" y1="6" x2="21" y2="6"/>
+                                    <circle cx="6" cy="18" r="4"/>
+                                    <line x1="13" y1="18" x2="21" y2="18"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h1>
+                                    <?php echo esc_html__( 'WPC Variations Radio Buttons', 'wpc-variations-radio-buttons' ) . ' ' . esc_html( WOOVR_VERSION ); ?>
+                                    <?php if ( defined( 'WOOVR_PREMIUM' ) ) : ?>
+                                        <span class="premium"><?php esc_html_e( 'Premium', 'wpc-variations-radio-buttons' ); ?></span>
+                                    <?php endif; ?>
+                                </h1>
+                                <p class="woovr-tagline">
+                                    <?php esc_html_e( 'Replace dropdown select with radio buttons for WooCommerce.', 'wpc-variations-radio-buttons' ); ?>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="woovr-settings-status-badge">
+                            <?php echo esc_html( $title_badge ); ?>
                         </div>
                     </div>
                 </div>
-                <h2></h2>
-                <?php if ( isset( $_GET['settings-updated'] ) && sanitize_text_field( wp_unslash( $_GET['settings-updated'] ?? '' ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+
+                <div class="woovr-admin-nav">
+                    <div class="woovr-nav-container">
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-woovr&tab=settings' ) ); ?>"
+                           class="woovr-nav-item <?php echo $active_tab === 'settings' ? 'active' : ''; ?>">
+                            <?php esc_html_e( 'Settings', 'wpc-variations-radio-buttons' ); ?>
+                        </a>
+                        <?php if ( ! defined( 'WOOVR_PREMIUM' ) ) : ?>
+                            <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-woovr&tab=premium' ) ); ?>"
+                               class="woovr-nav-item wpc-premium <?php echo $active_tab === 'premium' ? 'active' : ''; ?>">
+                                <?php esc_html_e( 'Premium Version', 'wpc-variations-radio-buttons' ); ?>
+                            </a>
+                        <?php endif; ?>
+                        <?php if ( defined( 'WOOVR_PREMIUM' ) ) : ?>
+                            <a href="<?php echo esc_url( WOOVR_SUPPORT ); ?>" class="woovr-nav-item" target="_blank">
+                                <?php esc_html_e( 'Support', 'wpc-variations-radio-buttons' ); ?>
+                            </a>
+                        <?php endif; ?>
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-kit' ) ); ?>"
+                           class="woovr-nav-item">
+                            <?php esc_html_e( 'Essential Kit', 'wpc-variations-radio-buttons' ); ?>
+                        </a>
+                    </div>
+                </div>
+
+                <?php if ( isset( $_GET['settings-updated'] ) && sanitize_text_field( wp_unslash( $_GET['settings-updated'] ?? '' ) ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
                     <div class="notice notice-success is-dismissible">
                         <p><?php esc_html_e( 'Settings updated.', 'wpc-variations-radio-buttons' ); ?></p>
                     </div>
-                <?php } ?>
-                <div class="wpclever_settings_page_nav">
-                    <h2 class="nav-tab-wrapper">
-                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-woovr&tab=settings' ) ); ?>"
-                           class="<?php echo esc_attr( $active_tab === 'settings' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>">
-                            <?php esc_html_e( 'Settings', 'wpc-variations-radio-buttons' ); ?>
-                        </a>
-                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-woovr&tab=premium' ) ); ?>"
-                           class="<?php echo esc_attr( $active_tab === 'premium' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>"
-                           style="color: #c9356e">
-                            <?php esc_html_e( 'Premium Version', 'wpc-variations-radio-buttons' ); ?>
-                        </a>
-                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-kit' ) ); ?>"
-                           class="nav-tab">
-                            <?php esc_html_e( 'Essential Kit', 'wpc-variations-radio-buttons' ); ?>
-                        </a>
-                    </h2>
-                </div>
-                <div class="wpclever_settings_page_content">
+                <?php endif; ?>
+
+                <div class="woovr-settings-page-content">
                     <?php if ( $active_tab === 'settings' ) {
                         $active             = WPClever_Woovr::get_setting( 'active', 'yes' );
                         $hide_unpurchasable = WPClever_Woovr::get_setting( 'hide_unpurchasable', 'no' );
@@ -133,244 +154,225 @@ if ( ! class_exists( 'WPClever_Woovr_Backend' ) ) {
                         $clear_image_id     = WPClever_Woovr::get_setting( 'clear_image_id', '' );
                         ?>
                         <form method="post" action="options.php">
-                            <table class="form-table">
-                                <tr>
-                                    <th>
-                                        <?php esc_html_e( 'Active', 'wpc-variations-radio-buttons' ); ?>
-                                    </th>
-                                    <td>
-                                        <label> <select name="woovr_settings[active]">
-                                                <option value="no" <?php echo esc_attr( $active === 'no' || $active === 'yes_wpc' ? 'selected' : '' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="yes" <?php selected( $active, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
-                                            </select> </label>
-                                        <span class="description"><?php esc_html_e( 'This is the default status, you can set status for individual product in the its settings.', 'wpc-variations-radio-buttons' ); ?></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <?php esc_html_e( 'Hide unpurchasable variation', 'wpc-variations-radio-buttons' ); ?>
-                                    </th>
-                                    <td>
-                                        <label> <select name="woovr_settings[hide_unpurchasable]">
-                                                <option value="no" <?php selected( $hide_unpurchasable, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="yes" <?php selected( $hide_unpurchasable, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
-                                            </select> </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th><?php esc_html_e( 'Selector interface', 'wpc-variations-radio-buttons' ); ?></th>
-                                    <td>
-                                        <label> <select name="woovr_settings[selector]">
-                                                <option value="default" <?php selected( $selector, 'default' ); ?>><?php esc_html_e( 'Radio buttons (default)', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="ddslick" <?php selected( $selector, 'ddslick' ); ?>><?php esc_html_e( 'ddSlick', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="select2" <?php selected( $selector, 'select2' ); ?>><?php esc_html_e( 'Select2', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="select" <?php selected( $selector, 'select' ); ?>><?php esc_html_e( 'HTML select tag', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="grid-2" <?php selected( $selector, 'grid-2' ); ?>><?php esc_html_e( 'Grid - 2 columns', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="grid-3" <?php selected( $selector, 'grid-3' ); ?> <?php selected( $selector, 'grid' ); ?>><?php esc_html_e( 'Grid - 3 columns', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="grid-4" <?php selected( $selector, 'grid-4' ); ?>><?php esc_html_e( 'Grid - 4 columns', 'wpc-variations-radio-buttons' ); ?></option>
-                                            </select> </label> <span class="description">
-                                                    Read more about ddSlick, Select2 and HTML select tag <a
-                                                    href="https://wpclever.net/downloads/variations-radio-buttons"
-                                                    target="_blank">here</a>.
+                            <?php settings_fields( 'woovr_settings' ); ?>
+                            <div class="woovr-card">
+                                <h2 class="woovr-card-title"><?php esc_html_e( 'General', 'wpc-variations-radio-buttons' ); ?></h2>
+                                <p class="woovr-card-desc"><?php esc_html_e( 'General settings for variations radio buttons.', 'wpc-variations-radio-buttons' ); ?></p>
+                                <table class="woovr-form-table">
+                                    <tr>
+                                        <th>
+                                            <?php esc_html_e( 'Active', 'wpc-variations-radio-buttons' ); ?>
+                                        </th>
+                                        <td>
+                                            <label> <select name="woovr_settings[active]">
+                                                    <option value="no" <?php echo esc_attr( $active === 'no' || $active === 'yes_wpc' ? 'selected' : '' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="yes" <?php selected( $active, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
+                                                </select> </label>
+                                            <span class="description"><?php esc_html_e( 'This is the default status, you can set status for individual product in the its settings.', 'wpc-variations-radio-buttons' ); ?></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <?php esc_html_e( 'Hide unpurchasable variation', 'wpc-variations-radio-buttons' ); ?>
+                                        </th>
+                                        <td>
+                                            <label> <select name="woovr_settings[hide_unpurchasable]">
+                                                    <option value="no" <?php selected( $hide_unpurchasable, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="yes" <?php selected( $hide_unpurchasable, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
+                                                </select> </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><?php esc_html_e( 'Selector interface', 'wpc-variations-radio-buttons' ); ?></th>
+                                        <td>
+                                            <label> <select name="woovr_settings[selector]">
+                                                    <option value="default" <?php selected( $selector, 'default' ); ?>><?php esc_html_e( 'Radio buttons (default)', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="ddslick" <?php selected( $selector, 'ddslick' ); ?>><?php esc_html_e( 'ddSlick', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="select2" <?php selected( $selector, 'select2' ); ?>><?php esc_html_e( 'Select2', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="select" <?php selected( $selector, 'select' ); ?>><?php esc_html_e( 'HTML select tag', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="grid-2" <?php selected( $selector, 'grid-2' ); ?>><?php esc_html_e( 'Grid - 2 columns', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="grid-3" <?php selected( $selector, 'grid-3' ); ?> <?php selected( $selector, 'grid' ); ?>><?php esc_html_e( 'Grid - 3 columns', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="grid-4" <?php selected( $selector, 'grid-4' ); ?>><?php esc_html_e( 'Grid - 4 columns', 'wpc-variations-radio-buttons' ); ?></option>
+                                                </select> </label> <span class="description">
+                                                        Read more about ddSlick, Select2 and HTML select tag <a
+                                                        href="https://wpclever.net/downloads/variations-radio-buttons/"
+                                                        target="_blank">here</a>.
+                                                    </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <?php esc_html_e( 'Show "Option none"', 'wpc-variations-radio-buttons' ); ?>
+                                        </th>
+                                        <td>
+                                            <label> <select name="woovr_settings[show_clear]">
+                                                    <option value="no" <?php selected( $show_clear, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="yes" <?php selected( $show_clear, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
+                                                </select> </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <?php esc_html_e( '"Option none" label', 'wpc-variations-radio-buttons' ); ?>
+                                        </th>
+                                        <td>
+                                            <label>
+                                                <input type="text"
+                                                       name="woovr_settings[clear_label]"
+                                                       placeholder="<?php esc_html_e( 'Choose an option', 'wpc-variations-radio-buttons' ); ?>"
+                                                       value="<?php echo esc_attr( $clear_label ); ?>"/>
+                                            </label>
+                                            <span class="description"><?php esc_html_e( 'Leave blank to use the default text and its equivalent translation in multiple languages.', 'wpc-variations-radio-buttons' ); ?></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><?php esc_html_e( '"Option none" image', 'wpc-variations-radio-buttons' ); ?></th>
+                                        <td>
+                                            <label>
+                                                <select name="woovr_settings[clear_image]"
+                                                        class="woovr_clear_image">
+                                                    <option value="placeholder" <?php selected( $clear_image, 'placeholder' ); ?>><?php esc_html_e( 'Placeholder image', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="product" <?php selected( $clear_image, 'product' ); ?>><?php esc_html_e( 'Main product\'s image', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="custom" <?php selected( $clear_image, 'custom' ); ?>><?php esc_html_e( 'Custom image', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="none" <?php selected( $clear_image, 'none' ); ?>><?php esc_html_e( 'No image', 'wpc-variations-radio-buttons' ); ?></option>
+                                                </select> </label>
+                                            <span class="description"><?php esc_html_e( 'If you choose "Placeholder image", you can change it in WooCommerce > Settings > Products > Placeholder image.', 'wpc-variations-radio-buttons' ); ?></span>
+                                            <div class="woovr_clear_image_custom">
+                                                <?php wp_enqueue_media(); ?>
+                                                <span class="woovr_image_selector">
+                                                    <input type="hidden" class="woovr_image_id"
+                                                           name="woovr_settings[clear_image_id]"
+                                                           value="<?php echo esc_attr( $clear_image_id ); ?>">
+                                                    <span class="woovr_image_preview">
+                                                        <?php if ( $clear_image_id ) {
+                                                            echo '<span class="woovr_image_preview">' . wp_get_attachment_image( $clear_image_id ) . '<a class="woovr_image_remove button" href="#">' . esc_html__( 'Remove', 'wpc-variations-radio-buttons' ) . '</a></span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                                        } else {
+                                                            echo '<span class="woovr_image_preview">' . wc_placeholder_img() . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                                        } ?>
+                                                    </span>
+                                                    <a href="#"
+                                                       class="woovr_image_add button"><?php esc_attr_e( 'Choose Image', 'wpc-variations-radio-buttons' ); ?></a>
                                                 </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <?php esc_html_e( 'Show "Option none"', 'wpc-variations-radio-buttons' ); ?>
-                                    </th>
-                                    <td>
-                                        <label> <select name="woovr_settings[show_clear]">
-                                                <option value="no" <?php selected( $show_clear, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="yes" <?php selected( $show_clear, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
-                                            </select> </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <?php esc_html_e( '"Option none" label', 'wpc-variations-radio-buttons' ); ?>
-                                    </th>
-                                    <td>
-                                        <label>
-                                            <input type="text" class="regular-text"
-                                                   name="woovr_settings[clear_label]"
-                                                   placeholder="<?php esc_html_e( 'Choose an option', 'wpc-variations-radio-buttons' ); ?>"
-                                                   value="<?php echo esc_attr( $clear_label ); ?>"/>
-                                        </label>
-                                        <p class="description"><?php esc_html_e( 'Leave blank to use the default text and its equivalent translation in multiple languages.', 'wpc-variations-radio-buttons' ); ?></p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th><?php esc_html_e( '"Option none" image', 'wpc-variations-radio-buttons' ); ?></th>
-                                    <td>
-                                        <label>
-                                            <select name="woovr_settings[clear_image]"
-                                                    class="woovr_clear_image">
-                                                <option value="placeholder" <?php selected( $clear_image, 'placeholder' ); ?>><?php esc_html_e( 'Placeholder image', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="product" <?php selected( $clear_image, 'product' ); ?>><?php esc_html_e( 'Main product\'s image', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="custom" <?php selected( $clear_image, 'custom' ); ?>><?php esc_html_e( 'Custom image', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="none" <?php selected( $clear_image, 'none' ); ?>><?php esc_html_e( 'No image', 'wpc-variations-radio-buttons' ); ?></option>
-                                            </select> </label>
-                                        <p class="description"><?php esc_html_e( 'If you choose "Placeholder image", you can change it in WooCommerce > Settings > Products > Placeholder image.', 'wpc-variations-radio-buttons' ); ?></p>
-                                        <div class="woovr_clear_image_custom" style="display: none">
-                                            <?php wp_enqueue_media(); ?>
-                                            <span class="woovr_image_selector">
-														<input type="hidden" class="woovr_image_id"
-                                                               name="woovr_settings[clear_image_id]"
-                                                               value="<?php echo esc_attr( $clear_image_id ); ?>">
-														<span class="woovr_image_preview">
-															<?php if ( $clear_image_id ) {
-                                                                echo '<span class="woovr_image_preview">' . wp_get_attachment_image( $clear_image_id ) . '<a class="woovr_image_remove button" href="#">' . esc_html__( 'Remove', 'wpc-variations-radio-buttons' ) . '</a></span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-                                                            } else {
-                                                                echo '<span class="woovr_image_preview">' . wc_placeholder_img() . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-                                                            } ?>
-														</span>
-														<a href="#"
-                                                           class="woovr_image_add button"><?php esc_attr_e( 'Choose Image', 'wpc-variations-radio-buttons' ); ?></a>
-													</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th><?php esc_html_e( 'Order by', 'wpc-variations-radio-buttons' ); ?></th>
-                                    <td>
-                                        <label> <select name="woovr_settings[orderby]">
-                                                <option value="default" <?php selected( $orderby, 'default' ); ?>><?php esc_html_e( 'Default', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="name" <?php selected( $orderby, 'name' ); ?>><?php esc_html_e( 'Name', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="price" <?php selected( $orderby, 'price' ); ?>><?php esc_html_e( 'Price', 'wpc-variations-radio-buttons' ); ?></option>
-                                            </select> </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th><?php esc_html_e( 'Order', 'wpc-variations-radio-buttons' ); ?></th>
-                                    <td>
-                                        <label> <select name="woovr_settings[order]">
-                                                <option value="default" <?php selected( $order, 'default' ); ?>><?php esc_html_e( 'Default', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="asc" <?php selected( $order, 'asc' ); ?>><?php esc_html_e( 'ASC', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="desc" <?php selected( $order, 'desc' ); ?>><?php esc_html_e( 'DESC', 'wpc-variations-radio-buttons' ); ?></option>
-                                            </select> </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th><?php esc_html_e( 'Variation name', 'wpc-variations-radio-buttons' ); ?></th>
-                                    <td>
-                                        <label> <select name="woovr_settings[variation_name]">
-                                                <option value="formatted" <?php selected( $show_name, 'formatted' ); ?>><?php esc_html_e( 'Formatted without attribute label (e.g Green, M)', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="formatted_label" <?php selected( $show_name, 'formatted_label' ); ?>><?php esc_html_e( 'Formatted with attribute label (e.g Color: Green, Size: M)', 'wpc-variations-radio-buttons' ); ?></option>
-                                            </select> </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <?php esc_html_e( 'Include product name', 'wpc-variations-radio-buttons' ); ?>
-                                    </th>
-                                    <td>
-                                        <label> <select name="woovr_settings[product_name]">
-                                                <option value="no" <?php selected( $product_name, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="yes" <?php selected( $product_name, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
-                                            </select> </label>
-                                        <span class="description"><?php esc_html_e( 'Include the product name before variation name.', 'wpc-variations-radio-buttons' ); ?></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <?php esc_html_e( 'Show image', 'wpc-variations-radio-buttons' ); ?>
-                                    </th>
-                                    <td>
-                                        <label> <select name="woovr_settings[show_image]">
-                                                <option value="no" <?php selected( $show_image, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="yes" <?php selected( $show_image, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
-                                            </select> </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <?php esc_html_e( 'Show price', 'wpc-variations-radio-buttons' ); ?>
-                                    </th>
-                                    <td>
-                                        <label> <select name="woovr_settings[show_price]">
-                                                <option value="no" <?php selected( $show_price, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="yes" <?php selected( $show_price, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
-                                            </select> </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <?php esc_html_e( 'Show availability', 'wpc-variations-radio-buttons' ); ?>
-                                    </th>
-                                    <td>
-                                        <label> <select name="woovr_settings[show_availability]">
-                                                <option value="no" <?php selected( $show_availability, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="yes" <?php selected( $show_availability, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
-                                            </select> </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <?php esc_html_e( 'Show description', 'wpc-variations-radio-buttons' ); ?>
-                                    </th>
-                                    <td>
-                                        <label> <select name="woovr_settings[show_description]">
-                                                <option value="no" <?php selected( $show_description, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
-                                                <option value="yes" <?php selected( $show_description, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
-                                            </select> </label>
-                                    </td>
-                                </tr>
-                                <tr class="submit">
-                                    <th colspan="2">
-                                        <div class="wpclever_submit">
-                                            <?php
-                                            settings_fields( 'woovr_settings' );
-                                            submit_button( '', 'primary', 'submit', false );
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><?php esc_html_e( 'Order by', 'wpc-variations-radio-buttons' ); ?></th>
+                                        <td>
+                                            <label> <select name="woovr_settings[orderby]">
+                                                    <option value="default" <?php selected( $orderby, 'default' ); ?>><?php esc_html_e( 'Default', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="name" <?php selected( $orderby, 'name' ); ?>><?php esc_html_e( 'Name', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="price" <?php selected( $orderby, 'price' ); ?>><?php esc_html_e( 'Price', 'wpc-variations-radio-buttons' ); ?></option>
+                                                </select> </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><?php esc_html_e( 'Order', 'wpc-variations-radio-buttons' ); ?></th>
+                                        <td>
+                                            <label> <select name="woovr_settings[order]">
+                                                    <option value="default" <?php selected( $order, 'default' ); ?>><?php esc_html_e( 'Default', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="asc" <?php selected( $order, 'asc' ); ?>><?php esc_html_e( 'ASC', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="desc" <?php selected( $order, 'desc' ); ?>><?php esc_html_e( 'DESC', 'wpc-variations-radio-buttons' ); ?></option>
+                                                </select> </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><?php esc_html_e( 'Variation name', 'wpc-variations-radio-buttons' ); ?></th>
+                                        <td>
+                                            <label> <select name="woovr_settings[variation_name]">
+                                                    <option value="formatted" <?php selected( $show_name, 'formatted' ); ?>><?php esc_html_e( 'Formatted without attribute label (e.g Green, M)', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="formatted_label" <?php selected( $show_name, 'formatted_label' ); ?>><?php esc_html_e( 'Formatted with attribute label (e.g Color: Green, Size: M)', 'wpc-variations-radio-buttons' ); ?></option>
+                                                </select> </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <?php esc_html_e( 'Include product name', 'wpc-variations-radio-buttons' ); ?>
+                                        </th>
+                                        <td>
+                                            <label> <select name="woovr_settings[product_name]">
+                                                    <option value="no" <?php selected( $product_name, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="yes" <?php selected( $product_name, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
+                                                </select> </label>
+                                            <span class="description"><?php esc_html_e( 'Include the product name before variation name.', 'wpc-variations-radio-buttons' ); ?></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <?php esc_html_e( 'Show image', 'wpc-variations-radio-buttons' ); ?>
+                                        </th>
+                                        <td>
+                                            <label> <select name="woovr_settings[show_image]">
+                                                    <option value="no" <?php selected( $show_image, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="yes" <?php selected( $show_image, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
+                                                </select> </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <?php esc_html_e( 'Show price', 'wpc-variations-radio-buttons' ); ?>
+                                        </th>
+                                        <td>
+                                            <label> <select name="woovr_settings[show_price]">
+                                                    <option value="no" <?php selected( $show_price, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="yes" <?php selected( $show_price, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
+                                                </select> </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <?php esc_html_e( 'Show availability', 'wpc-variations-radio-buttons' ); ?>
+                                        </th>
+                                        <td>
+                                            <label> <select name="woovr_settings[show_availability]">
+                                                    <option value="no" <?php selected( $show_availability, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="yes" <?php selected( $show_availability, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
+                                                </select> </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <?php esc_html_e( 'Show description', 'wpc-variations-radio-buttons' ); ?>
+                                        </th>
+                                        <td>
+                                            <label> <select name="woovr_settings[show_description]">
+                                                    <option value="no" <?php selected( $show_description, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-variations-radio-buttons' ); ?></option>
+                                                    <option value="yes" <?php selected( $show_description, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-variations-radio-buttons' ); ?></option>
+                                                </select> </label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="woovr-submit-row">
+                                <?php
+                                submit_button( esc_html__( 'Save Changes', 'wpc-variations-radio-buttons' ), 'primary', 'submit', false );
 
-                                            if ( function_exists( 'wpc_last_saved' ) ) {
-                                                wpc_last_saved( WPClever_Woovr::get_settings() );
-                                            }
-                                            ?>
-                                        </div>
-                                        <a style="display: none;" class="wpclever_export"
-                                           data-key="woovr_settings"
-                                           data-name="settings"
-                                           href="#"><?php esc_html_e( 'import / export', 'wpc-variations-radio-buttons' ); ?></a>
-                                    </th>
-                                </tr>
-                            </table>
+                                if ( function_exists( 'wpc_last_saved' ) ) {
+                                    wpc_last_saved( WPClever_Woovr::get_settings() );
+                                }
+                                ?>
+                                <a class="wpclever_export woovr-export-btn"
+                                   data-key="woovr_settings"
+                                   data-name="settings"
+                                   href="#"><span class="dashicons dashicons-database-export"></span> <?php esc_html_e( 'Import / Export', 'wpc-variations-radio-buttons' ); ?></a>
+                            </div>
                         </form>
                     <?php } elseif ( $active_tab === 'premium' ) { ?>
-                        <div class="wpclever_settings_page_content_text">
-                            <p>
-                                Get the Premium Version just $29!
-                                <a href="https://wpclever.net/downloads/variations-radio-buttons?utm_source=pro&utm_medium=woovr&utm_campaign=wporg"
-                                   target="_blank">https://wpclever.net/downloads/variations-radio-buttons</a>
+                        <div class="woovr-card">
+                            <h2 class="woovr-card-title"><?php esc_html_e( 'Premium Version', 'wpc-variations-radio-buttons' ); ?></h2>
+                            <p class="woovr-card-desc">
+                                <?php esc_html_e( 'Get the Premium Version just $29!', 'wpc-variations-radio-buttons' ); ?>
+                                <a href="https://wpclever.net/downloads/variations-radio-buttons/?utm_source=pro&utm_medium=woovr&utm_campaign=wporg"
+                                   target="_blank">https://wpclever.net/downloads/variations-radio-buttons/</a>
                             </p>
-                            <p><strong>Extra features for Premium Version:</strong></p>
-                            <ul style="margin-bottom: 0">
-                                <li>- Settings for individual product.</li>
-                                <li>- Get the lifetime update & premium support.</li>
+                            <p><strong><?php esc_html_e( 'Extra features for Premium Version:', 'wpc-variations-radio-buttons' ); ?></strong></p>
+                            <ul class="woovr-premium-features">
+                                <li>- <?php esc_html_e( 'Settings for individual product.', 'wpc-variations-radio-buttons' ); ?></li>
+                                <li>- <?php esc_html_e( 'Get the lifetime update & premium support.', 'wpc-variations-radio-buttons' ); ?></li>
                             </ul>
                         </div>
                     <?php } ?>
-                </div><!-- /.wpclever_settings_page_content -->
-                <div class="wpclever_settings_page_suggestion">
-                    <div class="wpclever_settings_page_suggestion_label">
-                        <span class="dashicons dashicons-yes-alt"></span> Suggestion
-                    </div>
-                    <div class="wpclever_settings_page_suggestion_content">
-                        <div>
-                            To display custom engaging real-time messages on any wished positions, please
-                            install
-                            <a href="https://wordpress.org/plugins/wpc-smart-messages/" target="_blank">WPC
-                                Smart Messages</a> plugin. It's free!
-                        </div>
-                        <div>
-                            Wanna save your precious time working on variations? Try our brand-new free plugin
-                            <a href="https://wordpress.org/plugins/wpc-variation-bulk-editor/" target="_blank">WPC
-                                Variation Bulk Editor</a> and
-                            <a href="https://wordpress.org/plugins/wpc-variation-duplicator/" target="_blank">WPC
-                                Variation Duplicator</a>.
-                        </div>
-                    </div>
-                </div>
+                </div><!-- /.woovr-settings-page-content -->
             </div>
             <?php
         }
@@ -384,7 +386,9 @@ if ( ! class_exists( 'WPClever_Woovr_Backend' ) ) {
 
             if ( $plugin === $file ) {
                 $settings             = '<a href="' . esc_url( admin_url( 'admin.php?page=wpclever-woovr&tab=settings' ) ) . '">' . esc_html__( 'Settings', 'wpc-variations-radio-buttons' ) . '</a>';
-                $links['wpc-premium'] = '<a href="' . esc_url( admin_url( 'admin.php?page=wpclever-woovr&tab=premium' ) ) . '">' . esc_html__( 'Premium Version', 'wpc-variations-radio-buttons' ) . '</a>';
+                if ( ! defined( 'WOOVR_PREMIUM' ) ) {
+                    $links['wpc-premium'] = '<a href="' . esc_url( admin_url( 'admin.php?page=wpclever-woovr&tab=premium' ) ) . '">' . esc_html__( 'Premium Version', 'wpc-variations-radio-buttons' ) . '</a>';
+                }
                 array_unshift( $links, $settings );
             }
 
@@ -414,7 +418,7 @@ if ( ! class_exists( 'WPClever_Woovr_Backend' ) ) {
                 return null;
             }
 
-            wp_enqueue_style( 'woovr-backend', WOOVR_URI . 'assets/css/backend.css', [], WOOVR_VERSION );
+            wp_enqueue_style( 'woovr-backend', WOOVR_URI . 'assets/css/backend.css', [ 'woocommerce_admin_styles' ], WOOVR_VERSION );
             wp_enqueue_script( 'woovr-backend', WOOVR_URI . 'assets/js/backend.js', [ 'jquery' ], WOOVR_VERSION, true );
             wp_localize_script( 'woovr-backend', 'woovr_vars', [
                     'media_add_text' => esc_html__( 'Add to Variation', 'wpc-variations-radio-buttons' ),
@@ -483,7 +487,7 @@ if ( ! class_exists( 'WPClever_Woovr_Backend' ) ) {
                             <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-woovr&tab=settings' ) ); ?>"
                                target="_blank">default settings</a> for all products.<br/> To overwrite for
                             individual product, please use the premium version. Click
-                            <a href="https://wpclever.net/downloads/variations-radio-buttons?utm_source=pro&utm_medium=woovr&utm_campaign=wporg"
+                            <a href="https://wpclever.net/downloads/variations-radio-buttons/?utm_source=pro&utm_medium=woovr&utm_campaign=wporg"
                                target="_blank">here</a> to buy, just $29.
                         </div>
                     </div>
