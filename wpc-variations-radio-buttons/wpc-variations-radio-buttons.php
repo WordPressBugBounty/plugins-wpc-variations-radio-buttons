@@ -8,7 +8,7 @@ Author URI: https://wpclever.net
 Text Domain: wpc-variations-radio-buttons
 Domain Path: /languages/
 Requires Plugins: woocommerce
-Version: 3.9.0
+Version: 3.9.1
 Requires at least: 5.9
 WC requires at least: 3.0
 WC tested up to: 11.1
@@ -18,7 +18,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.9.0' );
+! defined( 'WOOVR_VERSION' ) && define( 'WOOVR_VERSION', '3.9.1' );
 ! defined( 'WOOVR_LITE' ) && define( 'WOOVR_LITE', __FILE__ );
 ! defined( 'WOOVR_FILE' ) && define( 'WOOVR_FILE', __FILE__ );
 ! defined( 'WOOVR_URI' ) && define( 'WOOVR_URI', plugin_dir_url( __FILE__ ) );
@@ -317,26 +317,28 @@ if ( ! class_exists( 'WPClever_Woovr' ) ) {
 
 						foreach ( $child_attrs as $k => $a ) {
 							if ( $a === '' ) {
-								if ( $product_attrs[ $k ]->get_id() ) {
-									foreach ( $product_attrs[ $k ]->get_terms() as $term ) {
-										if ( ! empty( $allowed_terms ) && ! empty( $allowed_terms[ $k ] ) ) {
-											if ( ! in_array( $term->slug, $allowed_terms[ $k ] ) ) {
-												continue;
+								if ( isset( $product_attrs[ $k ] ) && is_a( $product_attrs[ $k ], 'WC_Product_Attribute' ) ) {
+									if ( $product_attrs[ $k ]->get_id() ) {
+										foreach ( $product_attrs[ $k ]->get_terms() as $term ) {
+											if ( ! empty( $allowed_terms ) && ! empty( $allowed_terms[ $k ] ) ) {
+												if ( ! in_array( $term->slug, $allowed_terms[ $k ] ) ) {
+													continue;
+												}
 											}
-										}
 
-										$attrs[ 'attribute_' . $k ][] = $term->slug;
-									}
-								} else {
-									// custom attribute
-									foreach ( $product_attrs[ $k ]->get_options() as $option ) {
-										if ( ! empty( $allowed_terms ) && ! empty( $allowed_terms[ $k ] ) ) {
-											if ( ! in_array( $option, $allowed_terms[ $k ] ) ) {
-												continue;
+											$attrs[ 'attribute_' . $k ][] = $term->slug;
+										}
+									} else {
+										// custom attribute
+										foreach ( $product_attrs[ $k ]->get_options() as $option ) {
+											if ( ! empty( $allowed_terms ) && ! empty( $allowed_terms[ $k ] ) ) {
+												if ( ! in_array( $option, $allowed_terms[ $k ] ) ) {
+													continue;
+												}
 											}
-										}
 
-										$attrs[ 'attribute_' . $k ][] = $option;
+											$attrs[ 'attribute_' . $k ][] = $option;
+										}
 									}
 								}
 							} else {
